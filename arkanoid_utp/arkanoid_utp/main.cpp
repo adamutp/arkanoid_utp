@@ -23,6 +23,8 @@ int Resolution_Y = 600;
 
 int Mouse_X;
 int Mouse_Y;
+bool Mouse_left_click = false;
+bool Mouse_right_click = false;
 
 void LoadTextures()
 {
@@ -41,7 +43,7 @@ void ShowFPS()
 	static int a = 0;
 	if (a > FPS)
 	{
-		cout << "FPS: " << 1.0 / FrameTime << endl;
+		cout << "FPS: " << 1.0 / FrameTime << " FrameTime: "<<FrameTime<< endl;
 		a = 0;
 	}
 	a++;
@@ -49,7 +51,10 @@ void ShowFPS()
 
 void Controls()
 {
-
+	if (SDL_GetMouseState(&Mouse_X, &Mouse_Y) & SDL_BUTTON(SDL_BUTTON_LEFT))Mouse_left_click = true;
+	else Mouse_left_click = false;
+	if (SDL_GetMouseState(&Mouse_X, &Mouse_Y) & SDL_BUTTON(SDL_BUTTON_RIGHT))Mouse_right_click = true;
+	else Mouse_right_click = false;
 }
 
 void Game()
@@ -65,7 +70,7 @@ void Rendering()
 	SDL_RenderClear(Main_Renderer);
 
 	SDL_Rect dest;
-	dest = { 200, 200, 234, 201 };
+	dest = { Mouse_X, Mouse_Y, 234, 201 };
 	text1_size = { 0, 0, 234, 201 };
 	SDL_RenderCopy(Main_Renderer, example_texture1, &text1_size, &dest);
 
@@ -101,8 +106,7 @@ void MainLoop()
 		FrameTime = (TimeNow - TimeOld) / 1000.0;
 		TimeOld = TimeNow;
 
-		int RenderTime = SDL_GetTicks() - TimeNow;
-		SDL_Delay(1000/FPS - RenderTime);
+		SDL_Delay(1000/FPS);
 
 
 
