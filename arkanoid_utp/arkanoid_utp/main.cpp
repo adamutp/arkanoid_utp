@@ -2,39 +2,21 @@
 #include <conio.h>
 #include <SDL.h>
 #include <string>
+#include <SDL_image.h>
+#include "main.h"
 
-#define FPS 60.0
-using namespace std;
-
-SDL_Window * Main_Window;
-SDL_Renderer * Main_Renderer;
-SDL_Event Main_Event;
-SDL_Surface * example_surface;
-SDL_Texture * example_texture1;
-SDL_Rect text1_size;
-SDL_Texture * example_texture2;
-bool ProgramIsOn = true;
-
-int TimeNow, TimeOld = 1 ; //In miliseconds
-double FrameTime;
-
-int Resolution_X = 800;
-int Resolution_Y = 600;
-
-int Mouse_X;
-int Mouse_Y;
-bool Mouse_left_click = false;
-bool Mouse_right_click = false;
 
 void LoadTextures()
 {
 	
-	example_surface = SDL_LoadBMP("../arkanoid_utp/tex1.bmp");
+	example_surface = IMG_Load("../arkanoid_utp/tex1.bmp");
 	if (example_surface == NULL)
 	{
-		example_surface = SDL_LoadBMP("images/tex1.bmp");
+		example_surface = IMG_Load("images/tex1.bmp");
 	}
 	example_texture1 = SDL_CreateTextureFromSurface(Main_Renderer, example_surface);
+	
+
 
 }
 
@@ -89,11 +71,10 @@ void MainLoop()
 				if (Main_Event.key.keysym.sym == SDLK_ESCAPE) ProgramIsOn = false;
 		}
 		/*
-		What's first:
-
-		1. I/O Devices
-		2. Game calculations
-		3. Rendering
+		Co siê dzieje najpierw:
+		1. Aktualizacja sterowania (np. pozycji myszy)
+		2. Obliczenia gry (np. kierunek pi³ki)
+		3. Renderowanie (na podstawie wczesniejszych obliczen)
 		*/
 
 
@@ -127,6 +108,7 @@ int main(int argc, char **argv)
 {
 	cout << "Konsola do debugowania: "<<endl;
 	cout << "Sciezka do gry: "<<argv[0]<<endl;
+
 	InitSDL();
 
 	LoadTextures();
