@@ -25,3 +25,7 @@ SDL_Surface * example_surface;
 SDL_Texture * example_texture1;
 SDL_Rect text1_size;
 SDL_Texture * example_texture2;
+
+//Prototypy
+
+void LoadAllTextures();

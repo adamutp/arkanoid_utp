@@ -1,13 +1,18 @@
 #pragma once
+#include <SDL.h>
+#include <string>
+#include <SDL_image.h>
+#include <iostream>
 
-
+extern void LoadAllTextures();
+extern SDL_Renderer * Main_Renderer;
 //sciezki do grafik
 
 
 
 //klocki
 const char* k1_1 = "k1.bmp";
-const char* k1_2 = "images/k1.bmp";
+const char* k1_2 = "images/brick/k1.bmp";
 
 const char* k2_1 = "k2.bmp";
 const char* k2_2 = "images/brick/k2.bmp";

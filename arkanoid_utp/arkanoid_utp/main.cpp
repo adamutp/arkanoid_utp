@@ -8,13 +8,8 @@
 
 void LoadTextures()
 {
+	LoadAllTextures();
 	
-	example_surface = IMG_Load("../arkanoid_utp/tex1.bmp");
-	if (example_surface == NULL)
-	{
-		example_surface = IMG_Load("images/tex1.bmp");
-	}
-	example_texture1 = SDL_CreateTextureFromSurface(Main_Renderer, example_surface);
 	
 
 
