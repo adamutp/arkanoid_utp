@@ -48,8 +48,6 @@ void Rendering()
 
 	PutTexture("przycisk", Mouse_X, Mouse_Y);
 
-	
-
 	SDL_RenderPresent(Main_Renderer);
 }
 
