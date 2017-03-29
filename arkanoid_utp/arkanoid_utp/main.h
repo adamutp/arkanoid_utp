@@ -29,6 +29,14 @@ SDL_Texture * example_texture2;
 //Prototypy
 
 void LoadAllTextures();
+void Menu();
+void PlatformSelect();
 
 //Z pliku graphics.cpp
 extern void PutTexture(char *, int, int);
+
+//Zmienna okreœlaj¹ca gdzie aktualnie jesteœmy:
+//1-Menu  2-Gra 3-Wybór platformy ... mozna dodawac kolejne np. tablica highscore
+
+int GameState = 1;
+int ChosenPlatform = 1; //1-10 kolor platformy

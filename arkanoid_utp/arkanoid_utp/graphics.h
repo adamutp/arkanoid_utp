@@ -127,3 +127,5 @@ const char* menu2_2 = "images/menu/menu.jpg";
 const char* button_1 = "button.png";
 const char* button_2 = "images/menu/button.png";
 
+const char* menu1_1 = "Images/menu/menu2.jpg";
+

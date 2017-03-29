@@ -66,6 +66,7 @@ Texture pilka2(15, 15);
 //menu:
 Texture menu(800, 600);
 Texture przycisk(40, 40);
+Texture menu2(800, 600);
 
 void LoadAllTextures()
 {
@@ -193,6 +194,9 @@ void LoadAllTextures()
 	menu.Surf = IMG_Load(menu2_2);
 	menu.Txt = SDL_CreateTextureFromSurface(Main_Renderer, menu.Surf);
 	//============================================================
+	menu2.Surf = IMG_Load(menu1_1);
+	menu2.Txt = SDL_CreateTextureFromSurface(Main_Renderer, menu2.Surf);
+	//============================================================
 	przycisk.Surf = IMG_Load(button_2);
 	przycisk.Txt = SDL_CreateTextureFromSurface(Main_Renderer, przycisk.Surf);
 }
@@ -237,6 +241,7 @@ void PutTexture(char *texture_name, int x, int y)
 
 	else if (texture_name == "background") background.DrawTexture(x, y);
 	else if (texture_name == "menu") menu.DrawTexture(x, y);
+	else if (texture_name == "menu2") menu2.DrawTexture(x, y);
 	else if (texture_name == "pilka") pilka.DrawTexture(x, y);
 	else if (texture_name == "pilka1") pilka1.DrawTexture(x, y);
 	else if (texture_name == "pilka2") pilka2.DrawTexture(x, y);

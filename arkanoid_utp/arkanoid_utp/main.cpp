@@ -9,10 +9,6 @@
 void LoadTextures()
 {
 	LoadAllTextures();
-	
-	
-
-
 }
 
 void ShowFPS()
@@ -36,17 +32,35 @@ void Controls()
 
 void Game()
 {
+	if (GameState == 1)
+	{
+		//Menu
+		Menu();
+	}
+	else if(GameState == 2)
+	{
 
+		//G³ówna czêœæ gry
+	}
+	else if (GameState == 3)
+	{
+		PlatformSelect();
+		//Wybór platformy
+	}
+	else
+	{
+		std::cout << "Niepoprawny GameState w main.h";
+	}
 }
 
+void CleanWindow()
+{
+	SDL_SetRenderDrawColor(Main_Renderer, 150, 0, 0, 255);
+	SDL_RenderClear(Main_Renderer);
+}
 void Rendering()
 {
 	ShowFPS();
-
-	SDL_SetRenderDrawColor(Main_Renderer, 150, 0, 0, 255);
-	SDL_RenderClear(Main_Renderer);
-
-	PutTexture("przycisk", Mouse_X, Mouse_Y);
 
 	SDL_RenderPresent(Main_Renderer);
 }
@@ -72,6 +86,7 @@ void MainLoop()
 
 		TimeNow = SDL_GetTicks();
 
+		CleanWindow();
 		Controls();
 		Game();
 		Rendering();
