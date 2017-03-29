@@ -6,6 +6,7 @@
 
 extern void LoadAllTextures();
 extern SDL_Renderer * Main_Renderer;
+void PutTexture(char *texture_name, int x, int y);
 //sciezki do grafik
 
 

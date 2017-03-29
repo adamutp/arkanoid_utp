@@ -46,10 +46,9 @@ void Rendering()
 	SDL_SetRenderDrawColor(Main_Renderer, 150, 0, 0, 255);
 	SDL_RenderClear(Main_Renderer);
 
-	SDL_Rect dest;
-	dest = { Mouse_X, Mouse_Y, 64,64 };
-	text1_size = { 0, 0, 64, 64 };
-	SDL_RenderCopy(Main_Renderer, example_texture1, &text1_size, &dest);
+	PutTexture("k1", Mouse_X, Mouse_Y);
+
+	
 
 	SDL_RenderPresent(Main_Renderer);
 }

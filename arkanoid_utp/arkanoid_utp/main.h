@@ -29,3 +29,6 @@ SDL_Texture * example_texture2;
 //Prototypy
 
 void LoadAllTextures();
+
+//Z pliku graphics.cpp
+extern void PutTexture(char *, int, int);
