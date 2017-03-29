@@ -46,7 +46,7 @@ void Rendering()
 	SDL_SetRenderDrawColor(Main_Renderer, 150, 0, 0, 255);
 	SDL_RenderClear(Main_Renderer);
 
-	PutTexture("k1", Mouse_X, Mouse_Y);
+	PutTexture("przycisk", Mouse_X, Mouse_Y);
 
 	
 

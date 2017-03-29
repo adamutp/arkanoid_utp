@@ -69,7 +69,7 @@ Texture przycisk(40, 40);
 
 void LoadAllTextures()
 {
-	k1.Surf = IMG_Load(k1_1); //z projektowego pliku
+	//k1.Surf = IMG_Load(k1_1); //z projektowego pliku
 	if (k1.Surf == NULL)
 	{
 		k1.Surf = IMG_Load(k1_2); //z folderu gdzie jest .exe
@@ -82,6 +82,119 @@ void LoadAllTextures()
 		k2.Surf = IMG_Load(k2_2); 
 	}
 	k2.Txt = SDL_CreateTextureFromSurface(Main_Renderer, k2.Surf);
+
+	//============================================================
+	k3.Surf = IMG_Load(k3_2);
+	k3.Txt = SDL_CreateTextureFromSurface(Main_Renderer, k3.Surf);
+	//============================================================
+	k4.Surf = IMG_Load(k4_2);
+	k4.Txt = SDL_CreateTextureFromSurface(Main_Renderer, k4.Surf);
+	//============================================================
+	k5.Surf = IMG_Load(k5_2);
+	k5.Txt = SDL_CreateTextureFromSurface(Main_Renderer, k5.Surf);
+	//============================================================
+	k6.Surf = IMG_Load(k6_2);
+	k6.Txt = SDL_CreateTextureFromSurface(Main_Renderer, k6.Surf);
+	//============================================================
+	k7.Surf = IMG_Load(k7_2);
+	k7.Txt = SDL_CreateTextureFromSurface(Main_Renderer, k7.Surf);
+	//============================================================
+	k8.Surf = IMG_Load(k8_2);
+	k8.Txt = SDL_CreateTextureFromSurface(Main_Renderer, k8.Surf);
+	//============================================================
+	k9.Surf = IMG_Load(k9_2);
+	k9.Txt = SDL_CreateTextureFromSurface(Main_Renderer, k9.Surf);
+	//============================================================
+	k10.Surf = IMG_Load(k10_2);
+	k10.Txt = SDL_CreateTextureFromSurface(Main_Renderer, k10.Surf);
+	//============================================================
+	k11.Surf = IMG_Load(k11_2);
+	k11.Txt = SDL_CreateTextureFromSurface(Main_Renderer, k11.Surf);
+	//============================================================
+	k12.Surf = IMG_Load(k12_2);
+	k12.Txt = SDL_CreateTextureFromSurface(Main_Renderer, k12.Surf);
+	//============================================================
+	k13.Surf = IMG_Load(k13_2);
+	k13.Txt = SDL_CreateTextureFromSurface(Main_Renderer, k13.Surf);
+	//============================================================
+	k14.Surf = IMG_Load(k14_2);
+	k14.Txt = SDL_CreateTextureFromSurface(Main_Renderer, k14.Surf);
+	//============================================================
+	k15.Surf = IMG_Load(k15_2);
+	k15.Txt = SDL_CreateTextureFromSurface(Main_Renderer, k15.Surf);
+	//============================================================
+	k16.Surf = IMG_Load(k16_2);
+	k16.Txt = SDL_CreateTextureFromSurface(Main_Renderer, k16.Surf);
+	//============================================================
+	k17.Surf = IMG_Load(k17_2);
+	k17.Txt = SDL_CreateTextureFromSurface(Main_Renderer, k17.Surf);
+	//============================================================
+	k18.Surf = IMG_Load(k18_2);
+	k18.Txt = SDL_CreateTextureFromSurface(Main_Renderer, k18.Surf);
+	//============================================================
+	k19.Surf = IMG_Load(k19_2);
+	k19.Txt = SDL_CreateTextureFromSurface(Main_Renderer, k19.Surf);
+	//============================================================
+	k20.Surf = IMG_Load(k20_2);
+	k20.Txt = SDL_CreateTextureFromSurface(Main_Renderer, k20.Surf);
+
+	//PODEST:
+
+	//============================================================
+	podest1.Surf = IMG_Load(podest1_2);
+	podest1.Txt = SDL_CreateTextureFromSurface(Main_Renderer, podest1.Surf);
+	//============================================================
+	podest2.Surf = IMG_Load(podest2_2);
+	podest2.Txt = SDL_CreateTextureFromSurface(Main_Renderer, podest2.Surf);
+	//============================================================
+	podest3.Surf = IMG_Load(podest3_2);
+	podest3.Txt = SDL_CreateTextureFromSurface(Main_Renderer, podest3.Surf);
+	//============================================================
+	podest4.Surf = IMG_Load(podest4_2);
+	podest4.Txt = SDL_CreateTextureFromSurface(Main_Renderer, podest4.Surf);
+	//============================================================
+	podest5.Surf = IMG_Load(podest5_2);
+	podest5.Txt = SDL_CreateTextureFromSurface(Main_Renderer, podest5.Surf);
+	//============================================================
+	podest6.Surf = IMG_Load(podest6_2);
+	podest6.Txt = SDL_CreateTextureFromSurface(Main_Renderer, podest6.Surf);
+	//============================================================
+	podest7.Surf = IMG_Load(podest7_2);
+	podest7.Txt = SDL_CreateTextureFromSurface(Main_Renderer, podest7.Surf);
+	//============================================================
+	podest8.Surf = IMG_Load(podest8_2);
+	podest8.Txt = SDL_CreateTextureFromSurface(Main_Renderer, podest8.Surf);
+	//============================================================
+	podest9.Surf = IMG_Load(podest9_2);
+	podest9.Txt = SDL_CreateTextureFromSurface(Main_Renderer, podest9.Surf);
+	//============================================================
+	podest10.Surf = IMG_Load(podest10_2);
+	podest10.Txt = SDL_CreateTextureFromSurface(Main_Renderer, podest10.Surf);
+
+	//PILKI:
+
+	//============================================================
+	pilka.Surf = IMG_Load(pilka_2);
+	pilka.Txt = SDL_CreateTextureFromSurface(Main_Renderer, pilka.Surf);
+	//============================================================
+	pilka1.Surf = IMG_Load(pilka1_2);
+	pilka1.Txt = SDL_CreateTextureFromSurface(Main_Renderer, pilka1.Surf);
+	//============================================================
+	pilka2.Surf = IMG_Load(pilka2_2);
+	pilka2.Txt = SDL_CreateTextureFromSurface(Main_Renderer, pilka2.Surf);
+
+	//TLO I MENU
+
+	//============================================================
+	background.Surf = IMG_Load(background_2);
+	background.Txt = SDL_CreateTextureFromSurface(Main_Renderer, background.Surf);
+
+	//============================================================
+	menu.Surf = IMG_Load(menu2_2);
+	menu.Txt = SDL_CreateTextureFromSurface(Main_Renderer, menu.Surf);
+	//============================================================
+	przycisk.Surf = IMG_Load(button_2);
+	przycisk.Txt = SDL_CreateTextureFromSurface(Main_Renderer, przycisk.Surf);
 }
 
 void PutTexture(char *texture_name, int x, int y)
@@ -90,6 +203,44 @@ void PutTexture(char *texture_name, int x, int y)
 	{
 		k1.DrawTexture(x, y);
 	}
+	else if (texture_name == "k2") k2.DrawTexture(x, y);
+	else if (texture_name == "k3") k3.DrawTexture(x, y);
+	else if (texture_name == "k4") k4.DrawTexture(x, y);
+	else if (texture_name == "k5") k5.DrawTexture(x, y);
+	else if (texture_name == "k6") k6.DrawTexture(x, y);
+	else if (texture_name == "k7") k7.DrawTexture(x, y);
+	else if (texture_name == "k8") k8.DrawTexture(x, y);
+	else if (texture_name == "k9") k9.DrawTexture(x, y);
+	else if (texture_name == "k10") k10.DrawTexture(x, y);
+	else if (texture_name == "k11") k11.DrawTexture(x, y);
+	else if (texture_name == "k12") k12.DrawTexture(x, y);
+	else if (texture_name == "k13") k13.DrawTexture(x, y);
+	else if (texture_name == "k14") k14.DrawTexture(x, y);
+	else if (texture_name == "k15") k15.DrawTexture(x, y);
+	else if (texture_name == "k16") k16.DrawTexture(x, y);
+	else if (texture_name == "k17") k17.DrawTexture(x, y);
+	else if (texture_name == "k18") k18.DrawTexture(x, y);
+	else if (texture_name == "k19") k19.DrawTexture(x, y);
+	else if (texture_name == "k20") k20.DrawTexture(x, y);
+
+
+	else if (texture_name == "podest1") podest1.DrawTexture(x, y);
+	else if (texture_name == "podest2") podest2.DrawTexture(x, y);
+	else if (texture_name == "podest3") podest3.DrawTexture(x, y);
+	else if (texture_name == "podest4") podest4.DrawTexture(x, y);
+	else if (texture_name == "podest5") podest5.DrawTexture(x, y);
+	else if (texture_name == "podest6") podest6.DrawTexture(x, y);
+	else if (texture_name == "podest7") podest7.DrawTexture(x, y);
+	else if (texture_name == "podest8") podest8.DrawTexture(x, y);
+	else if (texture_name == "podest9") podest9.DrawTexture(x, y);
+	else if (texture_name == "podest10") podest10.DrawTexture(x, y);
+
+	else if (texture_name == "background") background.DrawTexture(x, y);
+	else if (texture_name == "menu") menu.DrawTexture(x, y);
+	else if (texture_name == "pilka") pilka.DrawTexture(x, y);
+	else if (texture_name == "pilka1") pilka1.DrawTexture(x, y);
+	else if (texture_name == "pilka2") pilka2.DrawTexture(x, y);
+	else if (texture_name == "przycisk") przycisk.DrawTexture(x, y);
 	else
 	{
 		std::cout << "Podales zla nazwe tekstury" << std::endl;
