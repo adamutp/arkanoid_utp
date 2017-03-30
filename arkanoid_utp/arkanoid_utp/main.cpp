@@ -24,10 +24,27 @@ void ShowFPS()
 
 void Controls()
 {
+	/*
 	if (SDL_GetMouseState(&Mouse_X, &Mouse_Y) & SDL_BUTTON(SDL_BUTTON_LEFT))Mouse_left_click = true;
-	else Mouse_left_click = false;
+	else Mouse_left_click = false;*/
+	if (SDL_GetMouseState(&Mouse_X, &Mouse_Y) & SDL_BUTTON(SDL_BUTTON_LEFT))
+	{
+		previousState = true;
+	}
+	else
+	{
+		if (previousState == true)Mouse_left_click = true;
+		previousState = false;
+	}
+
+
 	if (SDL_GetMouseState(&Mouse_X, &Mouse_Y) & SDL_BUTTON(SDL_BUTTON_RIGHT))Mouse_right_click = true;
 	else Mouse_right_click = false;
+}
+
+void EndLoop()
+{
+	Mouse_left_click = false;
 }
 
 void Game()
@@ -90,6 +107,7 @@ void MainLoop()
 		Controls();
 		Game();
 		Rendering();
+		EndLoop();
 
 		FrameTime = (TimeNow - TimeOld) / 1000.0;
 		TimeOld = TimeNow;

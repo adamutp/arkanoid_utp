@@ -18,6 +18,7 @@ int Mouse_X;
 int Mouse_Y;
 bool Mouse_left_click = false;
 bool Mouse_right_click = false;
+bool previousState = false;//do myszy
 
 //Tekstury
 

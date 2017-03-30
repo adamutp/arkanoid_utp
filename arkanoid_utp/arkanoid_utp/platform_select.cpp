@@ -70,8 +70,11 @@ void PS_IsPressed()
 	if (Mouse_X > 550 && Mouse_Y > 500 && Mouse_X < 670 && Mouse_Y < 520 && Mouse_left_click) {
 		ChosenPlatform = 10;
 	}
-	Mouse_left_click = false;
-	cout << "Wybrano platforme nr " << ChosenPlatform << endl;
+	if (Mouse_left_click == true)
+	{
+		cout << "Wybrano platforme nr: " << ChosenPlatform << endl;
+		GameState = 1;
+	}
 }
 
 void PlatformSelect()
