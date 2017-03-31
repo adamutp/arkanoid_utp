@@ -251,3 +251,4 @@ void PutTexture(char *texture_name, int x, int y)
 		std::cout << "Podales zla nazwe tekstury" << std::endl;
 	}
 }
+

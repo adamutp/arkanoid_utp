@@ -39,6 +39,7 @@ void PS_RefreshCursorPos()
 }
 void PS_IsPressed()
 {
+	/*
 	if (Mouse_X > 550 && Mouse_Y > 50 && Mouse_X < 670 && Mouse_Y < 70 && Mouse_left_click) 
 	{
 		ChosenPlatform = 1;
@@ -70,6 +71,8 @@ void PS_IsPressed()
 	if (Mouse_X > 550 && Mouse_Y > 500 && Mouse_X < 670 && Mouse_Y < 520 && Mouse_left_click) {
 		ChosenPlatform = 10;
 	}
+	*/
+	ChosenPlatform = CursorPos;
 	if (Mouse_left_click == true)
 	{
 		cout << "Wybrano platforme nr: " << ChosenPlatform << endl;
