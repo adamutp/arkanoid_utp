@@ -1,12 +1,12 @@
 #include <iostream>
-
+#include <string>
 using namespace std;
 
 extern int GameState;
 extern bool Mouse_left_click;
-extern void PutTexture(char *, int, int);
+extern void PutTexture(string, int, int);
 extern int Mouse_X, Mouse_Y;
-extern int ChosenPlatform;
+extern string ChosenPlatform;
 
 int CursorPos = 1;
 
@@ -72,9 +72,11 @@ void PS_IsPressed()
 		ChosenPlatform = 10;
 	}
 	*/
-	ChosenPlatform = CursorPos;
 	if (Mouse_left_click == true)
 	{
+		ChosenPlatform = "podest";
+		if (CursorPos < 10)ChosenPlatform = ChosenPlatform + char(CursorPos + '0');
+		else ChosenPlatform = "podest10";
 		cout << "Wybrano platforme nr: " << ChosenPlatform << endl;
 		GameState = 1;
 	}

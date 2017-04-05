@@ -34,10 +34,10 @@ void Menu();
 void PlatformSelect();
 void GameInProgress();
 //Z pliku graphics.cpp
-extern void PutTexture(char *, int, int);
+extern void PutTexture(string, int, int);
 
 //Zmienna okreœlaj¹ca gdzie aktualnie jesteœmy:
 //1-Menu  2-Gra 3-Wybór platformy ... mozna dodawac kolejne np. tablica highscore
 
 int GameState = 1;
-int ChosenPlatform = 1; //1-10 kolor platformy
+string ChosenPlatform = "podest1"; //podest1-10 kolor platformy

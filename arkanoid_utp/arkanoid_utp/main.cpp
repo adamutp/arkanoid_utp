@@ -124,7 +124,7 @@ void InitSDL()
 	SDL_Init(SDL_INIT_EVERYTHING);
 	SDL_CreateWindowAndRenderer(
 		Resolution_X, Resolution_Y,
-		SDL_WINDOW_RESIZABLE,
+		0,
 		&Main_Window, &Main_Renderer);
 	SDL_SetWindowTitle(Main_Window, "arkanoid_utp");
 }

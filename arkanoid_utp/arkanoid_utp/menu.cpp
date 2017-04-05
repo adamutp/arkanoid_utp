@@ -1,10 +1,10 @@
 #include <iostream>
-
+#include <string>
 using namespace std;
 
 extern int GameState;
 extern bool Mouse_left_click;
-extern void PutTexture(char *, int, int);
+extern void PutTexture(string, int, int);
 extern int Mouse_X, Mouse_Y;
 extern bool ProgramIsOn;
 short int CursorPos = 1; //1-Play 2-Zmien platforme 3-wyjdz
