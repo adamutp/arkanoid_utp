@@ -56,7 +56,7 @@ void Game()
 	}
 	else if(GameState == 2)
 	{
-
+		GameInProgress();
 		//G³ówna czêœæ gry
 	}
 	else if (GameState == 3)

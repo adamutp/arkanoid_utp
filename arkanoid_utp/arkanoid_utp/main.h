@@ -32,7 +32,7 @@ SDL_Texture * example_texture2;
 void LoadAllTextures();
 void Menu();
 void PlatformSelect();
-
+void GameInProgress();
 //Z pliku graphics.cpp
 extern void PutTexture(char *, int, int);
 
