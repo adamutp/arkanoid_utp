@@ -1,2 +1,4 @@
-﻿  arkanoid_utp.vcxproj -> G:\projekt\arkanoid_utp\Debug\arkanoid_utp.exe
+﻿  game.cpp
+g:\projekt\arkanoid_utp\arkanoid_utp\game.cpp(154): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+  arkanoid_utp.vcxproj -> G:\projekt\arkanoid_utp\Debug\arkanoid_utp.exe
   arkanoid_utp.vcxproj -> G:\projekt\arkanoid_utp\Debug\arkanoid_utp.pdb (Full PDB)

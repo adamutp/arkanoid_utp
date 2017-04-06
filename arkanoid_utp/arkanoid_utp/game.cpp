@@ -1,5 +1,7 @@
 #include <iostream>
 #include <SDL.h>
+#include <cmath>
+
 using namespace std;
 extern void PutTexture(char*, int, int);
 extern void GameInProgress();
@@ -8,8 +10,10 @@ int Level = 1; //numer poziomu
 bool LevelIsLoaded = false;
 extern int Mouse_X, Mouse_Y;
 int Platform_X=250, Platform_Y = 550;
-int Ball_X = 300, Ball_Y = 535;
 extern char *ChosenPlatform;
+extern bool Mouse_left_click;
+extern double FrameTime;
+
 struct Brick
 {
 	char *type;
@@ -21,6 +25,76 @@ struct Brick
 };
 
 Brick Map[19][19];
+
+class Ball
+{
+private:
+	bool landed;
+	double dir_x;
+	double dir_y;
+	double velocity;
+	double posx_2; //pozycja pi³ki wzglêdem platformy
+public:
+	double posx, posy;
+	Ball(double pos_x, double pos_y, bool b_landed, double dir_x, double dir_y); 
+	void BallEvents();
+};
+
+Ball::Ball(double pos_x, double pos_y, bool b_landed, double d_dir_x, double d_dir_y)
+{
+	dir_x = d_dir_x;
+	dir_y = d_dir_y;
+	landed = b_landed;
+	posx = pos_x;
+	posy = pos_y;
+	velocity = 220;
+	posx_2 = pos_x-Platform_X;
+}
+
+void Ball::BallEvents()
+{
+	if (landed == true) //jeœli wyl¹dowa³a, to pod¹¿aj za platform¹
+	{
+		posx = Platform_X + posx_2;
+	}
+	else //wszystkie akcje, gdy pi³ka nie jest na platformie
+	{
+		posx_2 = posx - Platform_X; //wyliczanie pozycji wzglêdem platformy - potrzebne gdy pi³ka wyl¹dowa³a
+
+		double movespeed = FrameTime*velocity;
+		posx = posx + dir_x * movespeed; //Ruchy pi³ki w powietrzu
+		posy = posy + dir_y * movespeed;
+
+		//odbicie od klocków (kwadratowy hitbox)(trzeba zrobiæ hitbox o kszta³cie ko³a):
+
+		//odbicia od œcian:
+
+		if (posx < 20 || posx > 765)//odbicie o lewy lub bok
+		{
+			dir_x *= -1;
+		}
+		else if (posy < 0)
+		{
+			dir_y *= -1;
+		}
+
+		//odbicia od platformy:
+
+		if (posx > Platform_X - 15 && posx < Platform_X + 135 && posy > Platform_Y-15)
+		{
+			std::cout << posx_2 << endl;
+			dir_x *= -1;
+			dir_y *= -1;
+		}
+
+	}
+	if (Mouse_left_click) //mo¿na tu dodaæ te¿ np. strzelanie
+	{
+		landed = false;
+	}
+}
+
+Ball Main_Ball(Platform_X+60, Platform_Y-15, true, 1, -cos(1/2)); //Przypominam, ¿e góra ekranu to 0px, a dó³ 800px. Dlatego jest minus.
 
 void LoadMap()
 {
@@ -73,24 +147,24 @@ void ShowMap()
 	{
 		for (int b = 0; b < 19; b++) //poziomo
 		{
-			PutTexture(Map[a][b].type, 20 + b * 40, 35 + a * 20);
+			PutTexture(Map[a][b].type, 20 + b * 40, 35 + a * 20); //wyœwietlanie ca³ego Map[][].
 		}
 	}
 	PutTexture(ChosenPlatform, Platform_X, Platform_Y);
-	PutTexture("pilka1", Ball_X, Ball_Y);
+	PutTexture("pilka1", Main_Ball.posx, Main_Ball.posy);
 }
 
 void PlatformPosition()
 {
 	int windowX, windowY;
-	SDL_GetWindowPosition(Main_Window, &windowX, &windowY);
-	//cout << "X: " << Mouse_X << " Y:" << Mouse_Y << endl;
-	Platform_X = Platform_X + (Mouse_X - 400);
-	if (Platform_X < 20)Platform_X = 20;
+	SDL_GetWindowPosition(Main_Window, &windowX, &windowY); 
+	Platform_X = Platform_X + (Mouse_X - 400); //poruszanie
+	if (Platform_X < 20)Platform_X = 20; //¿eby nie wysz³o poza ekran
 	else if (Platform_X > 660)Platform_X = 660; //-120, bo taka dlugosc platformy
-	if (SDL_GetWindowFlags(Main_Window) & SDL_WINDOW_INPUT_FOCUS)
-		SDL_WarpMouseGlobal(windowX + 400, windowY + 300);
+	if (SDL_GetWindowFlags(Main_Window) & SDL_WINDOW_INPUT_FOCUS) //jesli nasza gra jest g³ównym oknem
+		SDL_WarpMouseGlobal(windowX + 400, windowY + 300); //kursor wraca na œrodek ekranu gry
 }
+/*
 void BallPosition()
 {
 	int windowX, windowY;
@@ -100,7 +174,7 @@ void BallPosition()
 	else if (Ball_X > 710)Ball_X = 710; 
 	if (SDL_GetWindowFlags(Main_Window) & SDL_WINDOW_INPUT_FOCUS)
 		SDL_WarpMouseGlobal(windowX + 400, windowY + 300);
-}
+}*/
 
 void GameInProgress()
 {
@@ -109,9 +183,11 @@ void GameInProgress()
 		LoadMap();
 		SDL_ShowCursor(0);
 	}
-	PutTexture("background", 0, 0);
-	ShowMap();
-	PlatformPosition();
-	BallPosition();
+	Main_Ball.BallEvents(); //wszystkie zdarzenia zwi¹zane z pi³k¹
+	PlatformPosition();//aktualizacja pozycji platformy dla ruchów myszy
+	PutTexture("background", 0, 0); //tekstura t³a
+	ShowMap(); //wyœwietlanie wszystkiego na ekranie
+
+	//BallPosition();
 
 }
