@@ -16,7 +16,7 @@ void ShowFPS()
 	static int a = 0;
 	if (a > FPS)
 	{
-		cout << "FPS: " << 1.0 / FrameTime << " FrameTime: "<<FrameTime<< endl;
+		std::cout << "FPS: " << 1.0 / FrameTime << " FrameTime: "<<FrameTime<< std::endl;
 		a = 0;
 	}
 	a++;
@@ -131,8 +131,8 @@ void InitSDL()
 
 int main(int argc, char **argv)
 {
-	cout << "Konsola do debugowania: "<<endl;
-	cout << "Sciezka do gry: "<<argv[0]<<endl;
+	std::cout << "Konsola do debugowania: "<< std::endl;
+	std::cout << "Sciezka do gry: "<<argv[0]<< std::endl;
 
 	InitSDL();
 
@@ -142,7 +142,7 @@ int main(int argc, char **argv)
 
 	SDL_Quit();
 
-	cout << "Koniec programu.";
+	std::cout << "Koniec programu.";
 	_getch();
 	return 0;
 }

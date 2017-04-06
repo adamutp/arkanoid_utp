@@ -1,15 +1,14 @@
 #include <iostream>
 #include <SDL.h>
-#include <string>
 using namespace std;
-extern void PutTexture(string, int, int);
+extern void PutTexture(char*, int, int);
 extern void GameInProgress();
 extern SDL_Window * Main_Window;
 int Level = 1; //numer poziomu
 bool LevelIsLoaded = false;
 extern int Mouse_X, Mouse_Y;
 int Platform_X=250, Platform_Y = 550;
-extern string ChosenPlatform;
+extern char *ChosenPlatform;
 struct Brick
 {
 	char *type;
@@ -51,6 +50,8 @@ void PlatformPosition()
 	SDL_GetWindowPosition(Main_Window, &windowX, &windowY);
 	//cout << "X: " << Mouse_X << " Y:" << Mouse_Y << endl;
 	Platform_X = Platform_X + (Mouse_X - 400);
+	if (Platform_X < 20)Platform_X = 20;
+	else if (Platform_X > 660)Platform_X = 660; //-120, bo taka dlugosc platformy
 	if (SDL_GetWindowFlags(Main_Window) & SDL_WINDOW_INPUT_FOCUS)
 		SDL_WarpMouseGlobal(windowX + 400, windowY + 300);
 }
@@ -64,6 +65,6 @@ void GameInProgress()
 	}
 	PutTexture("background", 0, 0);
 	ShowMap();
-	//PlatformPosition();
+	PlatformPosition();
 
 }

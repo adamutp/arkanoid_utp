@@ -2,7 +2,6 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <iostream>
-#include <string>
 extern void LoadAllTextures();
 extern SDL_Renderer * Main_Renderer;
 //void PutTexture(string texture_name, int x, int y);

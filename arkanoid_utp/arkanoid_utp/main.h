@@ -1,7 +1,6 @@
 #pragma once
 
 #define FPS 60.0
-using namespace std;
 
 SDL_Window * Main_Window;
 SDL_Renderer * Main_Renderer;
@@ -34,10 +33,10 @@ void Menu();
 void PlatformSelect();
 void GameInProgress();
 //Z pliku graphics.cpp
-extern void PutTexture(string, int, int);
+extern void PutTexture(char*, int, int);
 
 //Zmienna okreœlaj¹ca gdzie aktualnie jesteœmy:
 //1-Menu  2-Gra 3-Wybór platformy ... mozna dodawac kolejne np. tablica highscore
 
 int GameState = 1;
-string ChosenPlatform = "podest1"; //podest1-10 kolor platformy
+char *ChosenPlatform = "podest1"; //podest1-10 kolor platformy

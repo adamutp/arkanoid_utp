@@ -1,8 +1,6 @@
 #include <iostream>
-#include <string>
 #include "graphics.h"
 
-using namespace std;
 
 class Texture
 {
@@ -205,7 +203,7 @@ void LoadAllTextures()
 	przycisk.Txt = SDL_CreateTextureFromSurface(Main_Renderer, przycisk.Surf);
 }
 
-void PutTexture(string texture_name, int x, int y)
+void PutTexture(char *texture_name, int x, int y)
 {
 	if (texture_name == "k1")
 	{
