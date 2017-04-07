@@ -11,8 +11,8 @@ bool LevelIsLoaded = false;
 extern int Mouse_X, Mouse_Y;
 int Platform_X=250, Platform_Y = 550;
 extern char *ChosenPlatform;
-extern bool Mouse_left_click;
-extern double FrameTime;
+extern bool Mouse_left_click; //Troche Ÿle dzia³a. Zmienia siê na true wtedy gdy puœcimy. Do menu siê nada, ale nie do gry
+extern double FrameTime; //Wa¿ne! Czas klatki
 
 struct Brick
 {
@@ -36,10 +36,12 @@ private:
 	double posx_2; //pozycja pi³ki wzglêdem platformy
 public:
 	double posx, posy;
+	bool CanBounce; //zapobiega utykaniu pi³ki w platformie. 
 	Ball(double pos_x, double pos_y, bool b_landed, double dir_x, double dir_y); 
 	void BallEvents();
 };
 
+//Konstruktor
 Ball::Ball(double pos_x, double pos_y, bool b_landed, double d_dir_x, double d_dir_y)
 {
 	dir_x = d_dir_x;
@@ -49,8 +51,9 @@ Ball::Ball(double pos_x, double pos_y, bool b_landed, double d_dir_x, double d_d
 	posy = pos_y;
 	velocity = 220;
 	posx_2 = pos_x-Platform_X;
+	CanBounce = true;
 }
-
+//G³ówne akcje zwi¹zane z pi³k¹
 void Ball::BallEvents()
 {
 	if (landed == true) //jeœli wyl¹dowa³a, to pod¹¿aj za platform¹
@@ -79,13 +82,23 @@ void Ball::BallEvents()
 		}
 
 		//odbicia od platformy:
-
-		if (posx > Platform_X - 15 && posx < Platform_X + 135 && posy > Platform_Y-15)
+																
+		if (posx > Platform_X - 15 && posx < Platform_X + 125 //Je¿eli pi³ka jest w hitboxie platformy
+			&& posy > Platform_Y-15 && posy < Platform_Y)// -15 bo kulka(jej y jest w lewym gornym rogu)
 		{
-			std::cout << posx_2 << endl;
-			dir_x *= -1;
-			dir_y *= -1;
+			if (CanBounce) //Chodzi o to, by po dotkniêciu platformy mog³a odbiæ siê tylko raz
+			{
+				CanBounce = false;
+				double posC = (posx_2 - 60)/80;
+				std::cout << posC << endl;
+				//dir_x *= -1;
+				//dir_y *= -1;
+				dir_x = posC;
+				dir_y = -cos(posC);
+			}
+			//landed = true; //Dobre miejsce, by wstawiæ kod odpowiadaj¹cy za l¹dowanie pi³ki i przetrzymywanie
 		}
+		else CanBounce = true; //Jeœli pi³ka wyjdzie z pola platformy
 
 	}
 	if (Mouse_left_click) //mo¿na tu dodaæ te¿ np. strzelanie
