@@ -250,7 +250,7 @@ void PutTexture(char *texture_name, int x, int y)
 	else if (texture_name == "przycisk") przycisk.DrawTexture(x, y);
 	else
 	{
-		
+		std::cout << "Zla nazwa tekstury" << std::endl;
 	}
 }
 

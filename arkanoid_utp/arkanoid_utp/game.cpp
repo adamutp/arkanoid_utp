@@ -34,9 +34,11 @@ private:
 	double dir_y;
 	double velocity;
 	double posx_2; //pozycja pi³ki wzglêdem platformy
+	bool CanBounceP; //Czy pi³ka mo¿e odbiæ siê od platformy
+	bool CanBounceW; //Czy pi³ka mo¿e odbiæ siê od œciany
+	bool CanBounceB; //Czy pi³ka mo¿e odbiæ siê od klocka
 public:
 	double posx, posy;
-	bool CanBounce; //zapobiega utykaniu pi³ki w platformie. 
 	Ball(double pos_x, double pos_y, bool b_landed, double dir_x, double dir_y); 
 	void BallEvents();
 };
@@ -49,9 +51,9 @@ Ball::Ball(double pos_x, double pos_y, bool b_landed, double d_dir_x, double d_d
 	landed = b_landed;
 	posx = pos_x;
 	posy = pos_y;
-	velocity = 220;
+	velocity = 400;
 	posx_2 = pos_x-Platform_X;
-	CanBounce = true;
+	CanBounceP = true;
 }
 //G³ówne akcje zwi¹zane z pi³k¹
 void Ball::BallEvents()
@@ -64,42 +66,80 @@ void Ball::BallEvents()
 	{
 		posx_2 = posx - Platform_X; //wyliczanie pozycji wzglêdem platformy - potrzebne gdy pi³ka wyl¹dowa³a
 
+		double oldposx = posx; //jestem geniuszem
+		double oldposy = posy;
+
 		double movespeed = FrameTime*velocity;
 		posx = posx + dir_x * movespeed; //Ruchy pi³ki w powietrzu
 		posy = posy + dir_y * movespeed;
 
-		//odbicie od klocków (kwadratowy hitbox)(trzeba zrobiæ hitbox o kszta³cie ko³a):
 
+
+
+		int blockX, blockY;
+		//odbicie od klocków (kwadratowy hitbox)(trzeba zrobiæ hitbox o kszta³cie ko³a):
+		for (int a = 0; a < 19; a++)
+		{
+			for (int b = 0; b < 19; b++)
+			{
+				if (!Map[a][b].IsVisible) continue;
+				//pozycje lewego gornego rogu klocka:
+				blockX = 20 + a * 40;
+				blockY = 35 + b * 20;
+
+				if (posx > blockX - 15 && posx < blockX + 40 && posy+15 > blockY && posy < blockY + 20)
+				{
+					if (CanBounceB)
+					{
+						CanBounceB = false;
+						Map[a][b].IsVisible = false; //lub hp-1. Do poprawy
+
+						//uderzenie z góry albo do³u
+						if (oldposy + 15 < blockY || oldposy > blockY + 20) dir_y *= -1;
+						else dir_x *= -1; //odbicie z lewej lub prawej
+
+
+					}
+
+				}
+
+			}
+		}
+		if (posx > blockX - 15 && posx < blockX + 40 && posy + 15 > blockY && posy < blockY + 20)
+		{
+		}
+		else CanBounceB = true;
 		//odbicia od œcian:
 
-		if (posx < 20 || posx > 765)//odbicie o lewy lub bok
+		if ((posx < 20 || posx > 765) && CanBounceW)//odbicie o lewy lub prawy bok
 		{
+			CanBounceW = false;
 			dir_x *= -1;
 		}
-		else if (posy < 0)
+		else if (posy < 0 && CanBounceW)
 		{
+			CanBounceW = false;
 			dir_y *= -1;
 		}
+		else CanBounceW = true;
 
 		//odbicia od platformy:
 																
 		if (posx > Platform_X - 15 && posx < Platform_X + 125 //Je¿eli pi³ka jest w hitboxie platformy
 			&& posy > Platform_Y-15 && posy < Platform_Y)// -15 bo kulka(jej y jest w lewym gornym rogu)
 		{
-			if (CanBounce) //Chodzi o to, by po dotkniêciu platformy mog³a odbiæ siê tylko raz
+			if (CanBounceP) //Chodzi o to, by po dotkniêciu platformy mog³a odbiæ siê tylko raz
 			{
-				CanBounce = false;
+				CanBounceP = false;
 				double posC = (posx_2 - 60)/80;
-				std::cout << posC << endl;
-				//dir_x *= -1;
-				//dir_y *= -1;
 				dir_x = posC;
 				dir_y = -cos(posC);
 			}
 			//landed = true; //Dobre miejsce, by wstawiæ kod odpowiadaj¹cy za l¹dowanie pi³ki i przetrzymywanie
 		}
-		else CanBounce = true; //Jeœli pi³ka wyjdzie z pola platformy
-
+		else CanBounceP = true; //Jeœli pi³ka wyjdzie z pola platformy
+		oldposx = posx;
+		oldposy = posy;
 	}
 	if (Mouse_left_click) //mo¿na tu dodaæ te¿ np. strzelanie
 	{
@@ -107,7 +147,7 @@ void Ball::BallEvents()
 	}
 }
 
-Ball Main_Ball(Platform_X+60, Platform_Y-15, true, 1, -cos(1/2)); //Przypominam, ¿e góra ekranu to 0px, a dó³ 800px. Dlatego jest minus.
+Ball Main_Ball(Platform_X+60, Platform_Y-15, true, cos(M_PI/4), -sin(M_PI/4)); //Przypominam, ¿e góra ekranu to 0px, a dó³ 800px. Dlatego jest minus.
 
 void LoadMap()
 {
@@ -121,14 +161,14 @@ void LoadMap()
 			{
 				Map[a][b] = { "k7",500,false,true,1 };
 			}
-		}
+		}/*
 		else
 		{
 			for (int b = 1; b < 19; b += 2)
 			{
 				Map[a][b] = { "k7", 500, false, true, 1 };
 			}
-		}
+		}*/
 		
 	}
 	for (int a = 0; a < 19; a++)
@@ -139,7 +179,7 @@ void LoadMap()
 			{
 				Map[a][b] = { "k17",500,false,true,1 };
 			}
-		}
+		}/*
 		else
 		{
 			for (int b = 0; b < 19; b += 2)
@@ -147,7 +187,7 @@ void LoadMap()
 				Map[a][b] = { "k17", 500, false, true, 1 };
 			}
 		}
-
+		*/
 	}
 
 
@@ -156,11 +196,12 @@ void LoadMap()
 
 void ShowMap()
 {
-	for (int a = 0; a < 19; a++) //pionowo
+	for (int a = 0; a < 19; a++) //poziomo
 	{
-		for (int b = 0; b < 19; b++) //poziomo
+		for (int b = 0; b < 19; b++) //pionowo
 		{
-			PutTexture(Map[a][b].type, 20 + b * 40, 35 + a * 20); //wyœwietlanie ca³ego Map[][].
+			if(Map[a][b].IsVisible) 
+				PutTexture(Map[a][b].type, 20 + a * 40, 35 + b * 20); //wyœwietlanie ca³ego Map[][].
 		}
 	}
 	PutTexture(ChosenPlatform, Platform_X, Platform_Y);
