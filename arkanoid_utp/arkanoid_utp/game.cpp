@@ -6,6 +6,7 @@ using namespace std;
 extern void PutTexture(char*, int, int);
 extern void GameInProgress();
 extern SDL_Window * Main_Window;
+extern SDL_Renderer * Main_Renderer;
 int Level = 1; //numer poziomu
 bool LevelIsLoaded = false;
 extern int Mouse_X, Mouse_Y;
@@ -37,6 +38,8 @@ private:
 	bool CanBounceP; //Czy pi³ka mo¿e odbiæ siê od platformy
 	bool CanBounceW; //Czy pi³ka mo¿e odbiæ siê od œciany
 	bool CanBounceB; //Czy pi³ka mo¿e odbiæ siê od klocka
+	double pointX[8]; //8 punktów zwi¹zanych z kolizj¹
+	double pointY[8]; //8 punktów zwi¹zanych z kolizj¹
 public:
 	double posx, posy;
 	Ball(double pos_x, double pos_y, bool b_landed, double dir_x, double dir_y); 
@@ -73,11 +76,19 @@ void Ball::BallEvents()
 		posx = posx + dir_x * movespeed; //Ruchy pi³ki w powietrzu
 		posy = posy + dir_y * movespeed;
 
-
-
-
 		int blockX, blockY;
-		//odbicie od klocków (kwadratowy hitbox)(trzeba zrobiæ hitbox o kszta³cie ko³a):
+
+		//odbicie od klocków (hitbox pi³ki sklada sie z 8 punktów na okrêgu):
+
+			//z równania parametrycznego:
+		double alfa = 0;
+		for (int a = 0; a < 8; a++)
+		{
+			pointX[a] = posx + 7.5 + 7.5*cos(alfa);
+			pointY[a] = posy + 7.5 + 7.5*sin(alfa);
+			alfa = alfa + (2 * M_PI / 8); //hyhy powodzenia w rozkodowaniu tego
+		}
+
 		for (int a = 0; a < 19; a++)
 		{
 			for (int b = 0; b < 19; b++)
@@ -86,29 +97,31 @@ void Ball::BallEvents()
 				//pozycje lewego gornego rogu klocka:
 				blockX = 20 + a * 40;
 				blockY = 35 + b * 20;
-
-				if (posx > blockX - 15 && posx < blockX + 40 && posy+15 > blockY && posy < blockY + 20)
+				for (int c = 0; c < 8; c++) //te 8 punktów hitboxa pi³ki
 				{
-					if (CanBounceB)
+					if (pointX[c] > blockX && pointX[c] < blockX + 40 && pointY[c]> blockY && pointY[c] < blockY + 20)
 					{
-						CanBounceB = false;
-						Map[a][b].IsVisible = false; //lub hp-1. Do poprawy
+						if (CanBounceB)
+						{
+							CanBounceB = false;
+							Map[a][b].IsVisible = false; //lub hp-1. Do poprawy
 
-						//uderzenie z góry albo do³u
-						if (oldposy + 15 < blockY || oldposy > blockY + 20) dir_y *= -1;
-						else dir_x *= -1; //odbicie z lewej lub prawej
+							//uderzenie z góry albo do³u
+							if (oldposy + 15 < blockY || oldposy > blockY + 20) dir_y *= -1;
+							else dir_x *= -1; //odbicie z lewej lub prawej
 
 
+						}
+						break; //jak ju¿ pi³ka w coœ wybombi, to ma nie sprawdzaæ reszty punktów hitboxa
 					}
-
 				}
-
 			}
 		}
 		if (posx > blockX - 15 && posx < blockX + 40 && posy + 15 > blockY && posy < blockY + 20)
-		{
+		{//xD
 		}
 		else CanBounceB = true;
+
 		//odbicia od œcian:
 
 		if ((posx < 20 || posx > 765) && CanBounceW)//odbicie o lewy lub prawy bok
@@ -124,9 +137,10 @@ void Ball::BallEvents()
 		else CanBounceW = true;
 
 		//odbicia od platformy:
-																
+													
 		if (posx > Platform_X - 15 && posx < Platform_X + 125 //Je¿eli pi³ka jest w hitboxie platformy
 			&& posy > Platform_Y-15 && posy < Platform_Y)// -15 bo kulka(jej y jest w lewym gornym rogu)
+
 		{
 			if (CanBounceP) //Chodzi o to, by po dotkniêciu platformy mog³a odbiæ siê tylko raz
 			{
