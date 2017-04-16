@@ -15,6 +15,8 @@ extern char *ChosenPlatform;
 extern bool Mouse_left_click; //Troche Ÿle dzia³a. Zmienia siê na true wtedy gdy puœcimy. Do menu siê nada, ale nie do gry
 extern double FrameTime; //Wa¿ne! Czas klatki
 
+#define degtorad(angleDegrees) (angleDegrees * M_PI / 180.0)
+
 struct Brick
 {
 	char *type;
@@ -45,6 +47,11 @@ public:
 	Ball(double pos_x, double pos_y, bool b_landed, double dir_x, double dir_y); 
 	void BallEvents();
 };
+
+void NextLevel()
+{
+
+}
 
 //Konstruktor
 Ball::Ball(double pos_x, double pos_y, bool b_landed, double d_dir_x, double d_dir_y)
@@ -112,12 +119,12 @@ void Ball::BallEvents()
 
 
 						}
-						break; //jak ju¿ pi³ka w coœ wybombi, to ma nie sprawdzaæ reszty punktów hitboxa
+						break; //jak ju¿ pi³ka w coœ uderzy, to ma nie sprawdzaæ reszty punktów hitboxa
 					}
 				}
 			}
 		}
-		if (posx > blockX - 15 && posx < blockX + 40 && posy + 15 > blockY && posy < blockY + 20)
+		if (posx > blockX - 15 && posx < blockX + 40 && posy + 15 > blockY && posy < blockY + 20) //bug
 		{//xD
 		}
 		else CanBounceB = true;
@@ -145,9 +152,62 @@ void Ball::BallEvents()
 			if (CanBounceP) //Chodzi o to, by po dotkniêciu platformy mog³a odbiæ siê tylko raz
 			{
 				CanBounceP = false;
+				
 				double posC = (posx_2 - 60)/80;
 				dir_x = posC;
 				dir_y = -cos(posC);
+				/* //to albo to pod spodem jest ok
+				double posC = posx_2 - 60;
+				if (posC > 50)
+				{
+					dir_x = cos(degtorad(15));
+					dir_y = -sin(degtorad(15));
+				}
+				else if (posC > 30)
+				{
+					dir_x = cos(degtorad(30));
+					dir_y = -sin(degtorad(30));
+				}
+				else if (posC > 20)
+				{
+					dir_x = cos(degtorad(45));
+					dir_y = -sin(degtorad(45));
+				}
+				else if (posC > 10)
+				{
+					dir_x = cos(degtorad(75));
+					dir_y = -sin(degtorad(75));
+				}
+				else if (posC >= 0)
+				{
+					dir_x = cos(degtorad(83));
+					dir_y = -sin(degtorad(83));
+				}
+				else if (posC < -50)
+				{
+					dir_x = -cos(degtorad(15));
+					dir_y = -sin(degtorad(15));
+				}
+				else if (posC < -30)
+				{
+					dir_x = -cos(degtorad(30));
+					dir_y = -sin(degtorad(30));
+				}
+				else if (posC < -20)
+				{
+					dir_x = -cos(degtorad(45));
+					dir_y = -sin(degtorad(45));
+				}
+				else if (posC < -10)
+				{
+					dir_x = -cos(degtorad(75));
+					dir_y = -sin(degtorad(75));
+				}
+				else
+				{
+					dir_x = -cos(degtorad(83));
+					dir_y = -sin(degtorad(83));
+				}*/
 			}
 			//landed = true; //Dobre miejsce, by wstawiæ kod odpowiadaj¹cy za l¹dowanie pi³ki i przetrzymywanie
 		}
@@ -244,18 +304,23 @@ void BallPosition()
 		SDL_WarpMouseGlobal(windowX + 400, windowY + 300);
 }*/
 
+extern bool TriggerBlackToScr;
+extern void BlackToScr();
+
 void GameInProgress()
 {
 	if (!LevelIsLoaded)
 	{
 		LoadMap();
+		//Map[5][5] = { "k1", 500, false, true, 1 };
+		LevelIsLoaded = true;
 		SDL_ShowCursor(0);
 	}
 	Main_Ball.BallEvents(); //wszystkie zdarzenia zwi¹zane z pi³k¹
 	PlatformPosition();//aktualizacja pozycji platformy dla ruchów myszy
 	PutTexture("background", 0, 0); //tekstura t³a
 	ShowMap(); //wyœwietlanie wszystkiego na ekranie
-
+	if (TriggerBlackToScr)BlackToScr();
 	//BallPosition();
 
 }

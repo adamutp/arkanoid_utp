@@ -7,6 +7,7 @@ extern int Mouse_X, Mouse_Y;
 extern char *ChosenPlatform;
 
 int CursorPos = 1;
+extern bool TriggerBlackToScr;
 
 void PS_DrawButton()
 {
@@ -37,39 +38,6 @@ void PS_RefreshCursorPos()
 }
 void PS_IsPressed()
 {
-	/*
-	if (Mouse_X > 550 && Mouse_Y > 50 && Mouse_X < 670 && Mouse_Y < 70 && Mouse_left_click) 
-	{
-		ChosenPlatform = 1;
-	}
-	if (Mouse_X > 550 && Mouse_Y > 100 && Mouse_X < 670 && Mouse_Y < 120 && Mouse_left_click) {
-		ChosenPlatform = 2;
-	}
-	if (Mouse_X > 550 && Mouse_Y > 150 && Mouse_X < 670 && Mouse_Y < 170 && Mouse_left_click) {
-		ChosenPlatform = 3;
-	}
-	if (Mouse_X > 550 && Mouse_Y > 200 && Mouse_X < 670 && Mouse_Y < 220 && Mouse_left_click) {
-		ChosenPlatform = 4;
-	}
-	if (Mouse_X > 550 && Mouse_Y > 250 && Mouse_X < 670 && Mouse_Y < 270 && Mouse_left_click) {
-		ChosenPlatform = 5;
-	}
-	if (Mouse_X > 550 && Mouse_Y > 300 && Mouse_X < 670 && Mouse_Y < 320 && Mouse_left_click) {
-		ChosenPlatform = 6;
-	}
-	if (Mouse_X > 550 && Mouse_Y > 350 && Mouse_X < 670 && Mouse_Y < 370 && Mouse_left_click) {
-		ChosenPlatform = 7;
-	}
-	if (Mouse_X > 550 && Mouse_Y > 400 && Mouse_X < 670 && Mouse_Y < 420 && Mouse_left_click) {
-		ChosenPlatform = 8;
-		}
-	if (Mouse_X > 550 && Mouse_Y > 450 && Mouse_X < 670 && Mouse_Y < 470 && Mouse_left_click) {
-		ChosenPlatform = 9;
-	}
-	if (Mouse_X > 550 && Mouse_Y > 500 && Mouse_X < 670 && Mouse_Y < 520 && Mouse_left_click) {
-		ChosenPlatform = 10;
-	}
-	*/
 	if (Mouse_left_click == true)
 	{
 		switch (CursorPos)
@@ -110,9 +78,11 @@ void PS_IsPressed()
 		}
 		std::cout << "Wybrano platforme: " << ChosenPlatform << std::endl;
 		GameState = 1;//przejœcie do menu
+		TriggerBlackToScr = true;
 	}
 }
 
+extern void BlackToScr();
 void PlatformSelect()
 {
 	PutTexture("menu2", 0, 0);
@@ -127,7 +97,7 @@ void PlatformSelect()
 	PutTexture("podest9", 550, 450);
 	PutTexture("podest10", 550, 500);
 
-
+	if (TriggerBlackToScr) BlackToScr();
 	PS_RefreshCursorPos();
 	PS_DrawButton();
 	PS_IsPressed();

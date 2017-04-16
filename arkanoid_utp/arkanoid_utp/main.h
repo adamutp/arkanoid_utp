@@ -1,6 +1,6 @@
 #pragma once
 
-#define FPS 120.0
+double FPS = 120.0;
 
 SDL_Window * Main_Window;
 SDL_Renderer * Main_Renderer;

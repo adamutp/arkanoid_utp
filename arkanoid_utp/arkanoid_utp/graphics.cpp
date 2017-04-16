@@ -59,6 +59,8 @@ Texture podest10(120, 20);
 
 //tlo w grze:
 Texture background(800, 600);
+SDL_Surface * Black;
+SDL_Texture * Black_T;
 
 //pi³ka:
 Texture pilka(15, 15);
@@ -191,6 +193,12 @@ void LoadAllTextures()
 	//============================================================
 	background.Surf = IMG_Load(background_2);
 	background.Txt = SDL_CreateTextureFromSurface(Main_Renderer, background.Surf);
+	
+	//============================================================
+	Black = SDL_LoadBMP("images/ingame/black.bmp");
+	Black_T = SDL_CreateTextureFromSurface(Main_Renderer, Black);
+	SDL_BlendMode blending = SDL_BLENDMODE_BLEND;
+	SDL_SetTextureBlendMode(Black_T, blending);
 
 	//============================================================
 	menu.Surf = IMG_Load(menu2_2);
@@ -254,3 +262,54 @@ void PutTexture(char *texture_name, int x, int y)
 	}
 }
 
+extern double FrameTime;
+extern int TimeNow, TimeOld;
+extern double FPS;
+void ScrToBlack() //0.5s przejœcia
+{ 
+	Black = SDL_LoadBMP("images/ingame/black.bmp");
+	Black_T = SDL_CreateTextureFromSurface(Main_Renderer, Black);
+	SDL_BlendMode blending = SDL_BLENDMODE_BLEND;
+	SDL_SetTextureBlendMode(Black_T, blending);
+	double alpha = 0;
+	SDL_SetTextureAlphaMod(Black_T, alpha);
+	SDL_Rect src = { 0, 0, 800, 600 };
+	bool end = false;
+	double time=0;
+	while (!end)
+	{
+		TimeNow = SDL_GetTicks();
+		FrameTime = (TimeNow - TimeOld) / 1000.0;
+		time = time + FrameTime;
+		if (time > 0.5) 
+			end = true;
+		alpha = alpha + FrameTime * 20;
+		std::cout << alpha << std::endl;
+		SDL_SetTextureAlphaMod(Black_T, alpha);
+		SDL_RenderCopy(Main_Renderer, Black_T, &src, &src);
+		SDL_RenderPresent(Main_Renderer);
+		TimeOld = TimeNow;
+		SDL_Delay(1 / FPS);
+	}
+}
+
+extern bool TriggerBlackToScr;
+double BTSTime = 0;
+double BTSAlpha = 255;
+void BlackToScr() //0.5s przejœcia
+{
+	SDL_SetTextureAlphaMod(Black_T, BTSAlpha);
+	SDL_Rect src = { 0, 0, 800, 600 };
+	BTSTime = BTSTime + FrameTime;
+	BTSAlpha = BTSAlpha - FrameTime * 255;
+	std::cout << BTSAlpha << " ";
+	if (BTSAlpha < 0)BTSAlpha = 0;
+	SDL_SetTextureAlphaMod(Black_T, BTSAlpha);
+	SDL_RenderCopy(Main_Renderer, Black_T, &src, &src);
+	if (BTSTime > 1)
+	{
+		TriggerBlackToScr = false;
+		BTSAlpha = 255;
+		BTSTime = 0;
+	}
+}

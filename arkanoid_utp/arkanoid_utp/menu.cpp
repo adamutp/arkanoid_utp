@@ -19,17 +19,29 @@ void RefreshCursorPos()
 	if (Mouse_X > 370 && Mouse_Y > 460 && Mouse_X < 800 && Mouse_Y < 520) CursorPos = 2;
 	if (Mouse_X > 370 && Mouse_Y > 526 && Mouse_X < 800 && Mouse_Y < 570) CursorPos = 3;
 }
+
+extern void ScrToBlack();
+bool TriggerBlackToScr = false;
 void IsPressed()
 {
 	if (Mouse_X > 370 && Mouse_Y > 400 && Mouse_X < 800 && Mouse_Y < 450 && Mouse_left_click)
+	{
 		GameState = 2;
+		ScrToBlack();
+		TriggerBlackToScr = true;
+	}
 	if (Mouse_X > 370 && Mouse_Y > 460 && Mouse_X < 800 && Mouse_Y < 520 && Mouse_left_click)
 	{
 		GameState = 3;
+		ScrToBlack();
+		TriggerBlackToScr = true;
 	}
 	if (Mouse_X > 370 && Mouse_Y > 526 && Mouse_X < 800 && Mouse_Y < 570 && Mouse_left_click)
 		ProgramIsOn = false;
 }
+
+extern bool TriggerBlackToScr;
+extern void BlackToScr();
 void Menu()
 {
 	// Menu to nieskoñczona/g³ówna pêtla
@@ -37,4 +49,5 @@ void Menu()
 	RefreshCursorPos();
 	DrawButton();
 	IsPressed();
+	if (TriggerBlackToScr) BlackToScr();
 }
