@@ -64,6 +64,8 @@ Ball::Ball(double pos_x, double pos_y, bool b_landed, double d_dir_x, double d_d
 	velocity = 400;
 	posx_2 = pos_x-Platform_X;
 	CanBounceP = true;
+	CanBounceW = true;
+	CanBounceB = true;
 }
 //G³ówne akcje zwi¹zane z pi³k¹
 void Ball::BallEvents()
