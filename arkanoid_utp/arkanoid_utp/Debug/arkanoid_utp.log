@@ -1,4 +1,11 @@
-﻿  game.cpp
-g:\projekt\arkanoid_utp\arkanoid_utp\game.cpp(282): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+﻿  graphics.cpp
+g:\projekt\arkanoid_utp\arkanoid_utp\graphics.cpp(275): warning C4244: 'argument': conversion from 'double' to 'Uint8', possible loss of data
+g:\projekt\arkanoid_utp\arkanoid_utp\graphics.cpp(287): warning C4244: 'argument': conversion from 'double' to 'Uint8', possible loss of data
+g:\projekt\arkanoid_utp\arkanoid_utp\graphics.cpp(291): warning C4244: 'argument': conversion from 'double' to 'Uint32', possible loss of data
+g:\projekt\arkanoid_utp\arkanoid_utp\graphics.cpp(300): warning C4244: 'argument': conversion from 'double' to 'Uint8', possible loss of data
+g:\projekt\arkanoid_utp\arkanoid_utp\graphics.cpp(305): warning C4244: 'argument': conversion from 'double' to 'Uint8', possible loss of data
+  game.cpp
+g:\projekt\arkanoid_utp\arkanoid_utp\game.cpp(237): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+  Generating Code...
   arkanoid_utp.vcxproj -> G:\projekt\arkanoid_utp\Debug\arkanoid_utp.exe
   arkanoid_utp.vcxproj -> G:\projekt\arkanoid_utp\Debug\arkanoid_utp.pdb (Full PDB)

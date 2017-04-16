@@ -284,7 +284,6 @@ void ScrToBlack() //0.5s przejœcia
 		if (time > 0.5) 
 			end = true;
 		alpha = alpha + FrameTime * 20;
-		std::cout << alpha << std::endl;
 		SDL_SetTextureAlphaMod(Black_T, alpha);
 		SDL_RenderCopy(Main_Renderer, Black_T, &src, &src);
 		SDL_RenderPresent(Main_Renderer);
@@ -302,7 +301,6 @@ void BlackToScr() //0.5s przejœcia
 	SDL_Rect src = { 0, 0, 800, 600 };
 	BTSTime = BTSTime + FrameTime;
 	BTSAlpha = BTSAlpha - FrameTime * 255;
-	std::cout << BTSAlpha << " ";
 	if (BTSAlpha < 0)BTSAlpha = 0;
 	SDL_SetTextureAlphaMod(Black_T, BTSAlpha);
 	SDL_RenderCopy(Main_Renderer, Black_T, &src, &src);

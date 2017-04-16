@@ -153,61 +153,16 @@ void Ball::BallEvents()
 			{
 				CanBounceP = false;
 				
-				double posC = (posx_2 - 60)/80;
+				/*double posC = (posx_2 - 60)/80;
 				dir_x = posC;
-				dir_y = -cos(posC);
-				/* //to albo to pod spodem jest ok
-				double posC = posx_2 - 60;
-				if (posC > 50)
-				{
-					dir_x = cos(degtorad(15));
-					dir_y = -sin(degtorad(15));
-				}
-				else if (posC > 30)
-				{
-					dir_x = cos(degtorad(30));
-					dir_y = -sin(degtorad(30));
-				}
-				else if (posC > 20)
-				{
-					dir_x = cos(degtorad(45));
-					dir_y = -sin(degtorad(45));
-				}
-				else if (posC > 10)
-				{
-					dir_x = cos(degtorad(75));
-					dir_y = -sin(degtorad(75));
-				}
-				else if (posC >= 0)
-				{
-					dir_x = cos(degtorad(83));
-					dir_y = -sin(degtorad(83));
-				}
-				else if (posC < -50)
-				{
-					dir_x = -cos(degtorad(15));
-					dir_y = -sin(degtorad(15));
-				}
-				else if (posC < -30)
-				{
-					dir_x = -cos(degtorad(30));
-					dir_y = -sin(degtorad(30));
-				}
-				else if (posC < -20)
-				{
-					dir_x = -cos(degtorad(45));
-					dir_y = -sin(degtorad(45));
-				}
-				else if (posC < -10)
-				{
-					dir_x = -cos(degtorad(75));
-					dir_y = -sin(degtorad(75));
-				}
-				else
-				{
-					dir_x = -cos(degtorad(83));
-					dir_y = -sin(degtorad(83));
-				}*/
+				dir_y = -cos(posC);*/
+				double posC = 1.260*(120 - posx_2) + 13.95; 
+				if (posx_2 < 1)posC = 165;
+				if (posx_2 > 120)posC = 15;
+				if (posC < 90 && posC>70) posC = 70;
+				else if (posC >= 90 && posC < 110) posC = 110;
+				dir_x = cos(degtorad(posC));
+				dir_y = -sin(degtorad(posC));
 			}
 			//landed = true; //Dobre miejsce, by wstawiæ kod odpowiadaj¹cy za l¹dowanie pi³ki i przetrzymywanie
 		}
