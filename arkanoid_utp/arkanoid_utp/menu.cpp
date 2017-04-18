@@ -22,6 +22,9 @@ void RefreshCursorPos()
 
 extern void ScrToBlack();
 bool TriggerBlackToScr = false;
+
+extern double BTSTime;
+extern double BTSAlpha;
 void IsPressed()
 {
 	if (Mouse_X > 370 && Mouse_Y > 400 && Mouse_X < 800 && Mouse_Y < 450 && Mouse_left_click)
@@ -29,6 +32,8 @@ void IsPressed()
 		GameState = 2;
 		ScrToBlack();
 		TriggerBlackToScr = true;
+		BTSTime = 0;
+		BTSAlpha = 255;
 	}
 	if (Mouse_X > 370 && Mouse_Y > 460 && Mouse_X < 800 && Mouse_Y < 520 && Mouse_left_click)
 	{

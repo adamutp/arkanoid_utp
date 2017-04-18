@@ -61,7 +61,7 @@ Ball::Ball(double pos_x, double pos_y, bool b_landed, double d_dir_x, double d_d
 	landed = b_landed;
 	posx = pos_x;
 	posy = pos_y;
-	velocity = 400;
+	velocity = 500;
 	posx_2 = pos_x-Platform_X;
 	CanBounceP = true;
 	CanBounceW = true;
@@ -126,22 +126,44 @@ void Ball::BallEvents()
 				}
 			}
 		}
+
+		/*
+		
+			W TYM MIEJSCU SPRAWDZIÆ, CZY JEST 0 KLOCKÓW NA MAPIE. JAK TAK TO DAJ EFEKTY PRZEJSCIA + ZA£ADUJ NASTÊPN¥ MAPÊ
+		
+		*/
+
 		if (posx > blockX - 15 && posx < blockX + 40 && posy + 15 > blockY && posy < blockY + 20) //bug
-		{//xD
+		{
 		}
 		else CanBounceB = true;
 
 		//odbicia od œcian:
 
-		if ((posx < 20 || posx > 765) && CanBounceW)//odbicie o lewy lub prawy bok
+		if (posx < 20 || posx > 765)//odbicie o lewy lub prawy bok
 		{
-			CanBounceW = false;
-			dir_x *= -1;
+			if (CanBounceW)
+			{
+				CanBounceW = false;
+				dir_x *= -1;
+			}
 		}
-		else if (posy < 0 && CanBounceW)
+		else if ((posx < 20 || posx > 765) && posy < 0)
 		{
-			CanBounceW = false;
-			dir_y *= -1;
+			if (CanBounceW)
+			{
+				CanBounceW = false;
+				dir_y *= -1;
+				dir_x *= -1;
+			}
+		}
+		else if (posy < 0)
+		{
+			if (CanBounceW)
+			{
+				CanBounceW = false;
+				dir_y *= -1;
+			}
 		}
 		else CanBounceW = true;
 

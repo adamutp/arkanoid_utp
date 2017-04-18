@@ -304,6 +304,7 @@ void BlackToScr() //0.5s przejœcia
 	if (BTSAlpha < 0)BTSAlpha = 0;
 	SDL_SetTextureAlphaMod(Black_T, BTSAlpha);
 	SDL_RenderCopy(Main_Renderer, Black_T, &src, &src);
+	std::cout << BTSTime << " ";
 	if (BTSTime > 1)
 	{
 		TriggerBlackToScr = false;

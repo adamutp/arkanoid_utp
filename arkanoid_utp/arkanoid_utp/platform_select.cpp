@@ -36,6 +36,9 @@ void PS_RefreshCursorPos()
 	if (Mouse_X > 550 && Mouse_Y > 450 && Mouse_X < 670 && Mouse_Y < 470) CursorPos = 9;
 	if (Mouse_X > 550 && Mouse_Y > 500 && Mouse_X < 670 && Mouse_Y < 520) CursorPos = 10;
 }
+
+extern double BTSTime;
+extern double BTSAlpha;
 void PS_IsPressed()
 {
 	if (Mouse_left_click == true)
@@ -78,6 +81,8 @@ void PS_IsPressed()
 		}
 		std::cout << "Wybrano platforme: " << ChosenPlatform << std::endl;
 		GameState = 1;//przejœcie do menu
+		BTSTime = 0;
+		BTSAlpha = 255;
 		TriggerBlackToScr = true;
 	}
 }
