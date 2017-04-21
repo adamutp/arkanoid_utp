@@ -1,7 +1,0 @@
-﻿  platform_select.cpp
-  main.cpp
-g:\projekt\arkanoid_utp\arkanoid_utp\main.cpp(115): warning C4244: 'argument': conversion from 'double' to 'Uint32', possible loss of data
-  Generating Code...
-  LINK : G:\projekt\arkanoid_utp\Debug\arkanoid_utp.exe not found or not built by the last incremental link; performing full link
-  arkanoid_utp.vcxproj -> G:\projekt\arkanoid_utp\Debug\arkanoid_utp.exe
-  arkanoid_utp.vcxproj -> G:\projekt\arkanoid_utp\Debug\arkanoid_utp.pdb (Full PDB)
