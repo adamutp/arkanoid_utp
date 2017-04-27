@@ -72,6 +72,15 @@ Texture menu(800, 600);
 Texture przycisk(40, 40);
 Texture menu2(800, 600);
 
+//bonusy:
+
+Texture add_points(40, 20);
+Texture expand(40, 20);
+Texture glue(40, 20);
+Texture reduce(40, 20);
+Texture slow(40, 20);
+Texture speed(40, 20);
+
 void LoadAllTextures()
 {
 	//k1.Surf = IMG_Load(k1_1); //z projektowego pliku
@@ -209,6 +218,29 @@ void LoadAllTextures()
 	//============================================================
 	przycisk.Surf = IMG_Load(button_2);
 	przycisk.Txt = SDL_CreateTextureFromSurface(Main_Renderer, przycisk.Surf);
+
+	// BONUSY
+
+	//============================================================
+	add_points.Surf = IMG_Load(add_points_2);
+	add_points.Txt = SDL_CreateTextureFromSurface(Main_Renderer, add_points.Surf);
+	//============================================================
+	expand.Surf = IMG_Load(expand_2);
+	expand.Txt = SDL_CreateTextureFromSurface(Main_Renderer, expand.Surf);
+	//============================================================
+	reduce.Surf = IMG_Load(reduce_2);
+	reduce.Txt = SDL_CreateTextureFromSurface(Main_Renderer, reduce.Surf);
+	//============================================================
+	slow.Surf = IMG_Load(slow_2);
+	slow.Txt = SDL_CreateTextureFromSurface(Main_Renderer, slow.Surf);
+	//============================================================
+	speed.Surf = IMG_Load(speed_2);
+	speed.Txt = SDL_CreateTextureFromSurface(Main_Renderer, speed.Surf);
+	//============================================================
+	glue.Surf = IMG_Load(glue_2);
+	glue.Txt = SDL_CreateTextureFromSurface(Main_Renderer, glue.Surf);
+
+
 }
 
 void PutTexture(char *texture_name, int x, int y)
@@ -256,6 +288,17 @@ void PutTexture(char *texture_name, int x, int y)
 	else if (texture_name == "pilka1") pilka1.DrawTexture(x, y);
 	else if (texture_name == "pilka2") pilka2.DrawTexture(x, y);
 	else if (texture_name == "przycisk") przycisk.DrawTexture(x, y);
+
+
+	//bonusy
+	else if (texture_name == "add_points") add_points.DrawTexture(x, y);
+	else if (texture_name == "reduce") reduce.DrawTexture(x, y);
+	else if (texture_name == "expand") expand.DrawTexture(x, y);
+	else if (texture_name == "slow") slow.DrawTexture(x, y);
+	else if (texture_name == "speed") speed.DrawTexture(x, y);
+	else if (texture_name == "glue") glue.DrawTexture(x, y);
+
+
 	else
 	{
 		std::cout << "Zla nazwa tekstury" << std::endl;

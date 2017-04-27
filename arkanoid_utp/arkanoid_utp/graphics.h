@@ -127,3 +127,22 @@ const char* button_2 = "images/menu/button.png";
 
 const char* menu1_1 = "Images/menu/menu2.jpg";
 
+//bonusy
+
+const char* add_points_1 = "add_points.png";
+const char* add_points_2 =  "images/bonus/add_points.png";
+
+const char* expand_1 = "expand.png";
+const char* expand_2 = "images/bonus/expand.png";
+
+const char* reduce_1 = "reduce.png";
+const char* reduce_2 = "images/bonus/reduce.png";
+
+const char* slow_1 = "slow.png";
+const char* slow_2 = "images/bonus/slow.png";
+
+const char* speed_1 = "speed.png";
+const char* speed_2 = "images/bonus/speed.png";
+
+const char* glue_1 = "glue.png";
+const char* glue_2 = "images/bonus/glue.png";
