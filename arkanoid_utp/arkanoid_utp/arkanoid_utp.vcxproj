@@ -145,6 +145,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Editor.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="graphics.cpp" />
     <ClCompile Include="main.cpp" />
@@ -152,6 +153,7 @@
     <ClCompile Include="platform_select.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="game.h" />
     <ClInclude Include="graphics.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>

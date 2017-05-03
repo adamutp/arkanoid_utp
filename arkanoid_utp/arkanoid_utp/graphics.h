@@ -4,10 +4,9 @@
 #include <iostream>
 extern void LoadAllTextures();
 extern SDL_Renderer * Main_Renderer;
-//void PutTexture(string texture_name, int x, int y);
-//sciezki do grafik
 
 
+//sciezki do grafik:
 
 //klocki
 const char* k1_1 = "k1.bmp";

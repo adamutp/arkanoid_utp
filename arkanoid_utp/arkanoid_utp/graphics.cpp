@@ -10,6 +10,8 @@ public:
 	SDL_Surface * Surf;
 	Texture(int x, int y);
 	void DrawTexture(int x, int y);
+	void DrawTexture(int x, int y, double mod);
+	void DrawTexture(int x, int y, double modX, double modY);
 };
 
 Texture::Texture(int x, int y)
@@ -21,6 +23,19 @@ Texture::Texture(int x, int y)
 void Texture::DrawTexture(int x, int y)
 {
 	SDL_Rect dest = { x, y, size.w, size.h };
+	SDL_RenderCopy(Main_Renderer, Txt, &size, &dest);
+}
+
+//Postawia teksturê ze zmodyfikowan¹ szerokoœci¹ (do zmiany d³ugoœci platformy)
+void Texture::DrawTexture(int x, int y, double mod)
+{
+	SDL_Rect dest = { x, y, size.w*mod, size.h };
+	SDL_RenderCopy(Main_Renderer, Txt, &size, &dest);
+}
+
+void Texture::DrawTexture(int x, int y, double modX, double modY)
+{
+	SDL_Rect dest = { x, y, size.w*modX, size.h*modY };
 	SDL_RenderCopy(Main_Renderer, Txt, &size, &dest);
 }
 //klocki:
@@ -243,7 +258,7 @@ void LoadAllTextures()
 
 }
 
-void PutTexture(char *texture_name, int x, int y)
+void PutTexture(char *texture_name, int x, int y, double mod=1)
 {
 	if (texture_name == "k1")
 	{
@@ -270,16 +285,16 @@ void PutTexture(char *texture_name, int x, int y)
 	else if (texture_name == "k20") k20.DrawTexture(x, y);
 
 
-	else if (texture_name == "podest1") podest1.DrawTexture(x, y);
-	else if (texture_name == "podest2") podest2.DrawTexture(x, y);
-	else if (texture_name == "podest3") podest3.DrawTexture(x, y);
-	else if (texture_name == "podest4") podest4.DrawTexture(x, y);
-	else if (texture_name == "podest5") podest5.DrawTexture(x, y);
-	else if (texture_name == "podest6") podest6.DrawTexture(x, y);
-	else if (texture_name == "podest7") podest7.DrawTexture(x, y);
-	else if (texture_name == "podest8") podest8.DrawTexture(x, y);
-	else if (texture_name == "podest9") podest9.DrawTexture(x, y);
-	else if (texture_name == "podest10") podest10.DrawTexture(x, y);
+	else if (texture_name == "podest1") podest1.DrawTexture(x, y, mod);
+	else if (texture_name == "podest2") podest2.DrawTexture(x, y, mod);
+	else if (texture_name == "podest3") podest3.DrawTexture(x, y, mod);
+	else if (texture_name == "podest4") podest4.DrawTexture(x, y, mod);
+	else if (texture_name == "podest5") podest5.DrawTexture(x, y, mod);
+	else if (texture_name == "podest6") podest6.DrawTexture(x, y, mod);
+	else if (texture_name == "podest7") podest7.DrawTexture(x, y, mod);
+	else if (texture_name == "podest8") podest8.DrawTexture(x, y, mod);
+	else if (texture_name == "podest9") podest9.DrawTexture(x, y, mod);
+	else if (texture_name == "podest10") podest10.DrawTexture(x, y, mod);
 
 	else if (texture_name == "background") background.DrawTexture(x, y);
 	else if (texture_name == "menu") menu.DrawTexture(x, y);
@@ -301,13 +316,25 @@ void PutTexture(char *texture_name, int x, int y)
 
 	else
 	{
-		std::cout << "Zla nazwa tekstury" << std::endl;
+		//Ups
 	}
+}
+
+void PutResizedTexture(char *texture_name, int x, int y, double modX = 1, double modY = 1)
+{
+	if (texture_name == "podest3") podest3.DrawTexture(x, y, modX, modY);
+	else std::cout << "Zla nazwa tekstury";
 }
 
 extern double FrameTime;
 extern int TimeNow, TimeOld;
 extern double FPS;
+
+
+double BTSTime = 0;
+double BTSAlpha = 255;
+bool TransitionEffectOn = true;
+
 void ScrToBlack() //0.5s przejœcia
 { 
 	Black = SDL_LoadBMP("images/ingame/black.bmp");
@@ -335,9 +362,6 @@ void ScrToBlack() //0.5s przejœcia
 	}
 }
 
-extern bool TriggerBlackToScr;
-double BTSTime = 0;
-double BTSAlpha = 255;
 void BlackToScr() //0.5s przejœcia
 {
 	SDL_SetTextureAlphaMod(Black_T, BTSAlpha);
@@ -347,11 +371,18 @@ void BlackToScr() //0.5s przejœcia
 	if (BTSAlpha < 0)BTSAlpha = 0;
 	SDL_SetTextureAlphaMod(Black_T, BTSAlpha);
 	SDL_RenderCopy(Main_Renderer, Black_T, &src, &src);
-	std::cout << BTSTime << " ";
 	if (BTSTime > 1)
 	{
-		TriggerBlackToScr = false;
+		TransitionEffectOn = false;
 		BTSAlpha = 255;
 		BTSTime = 0;
 	}
+}
+
+void TransitionEffect()
+{
+	BTSTime = 0;
+	BTSAlpha = 255;
+	ScrToBlack();
+	TransitionEffectOn = true;
 }

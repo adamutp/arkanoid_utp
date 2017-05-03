@@ -2,25 +2,24 @@
 
 extern int GameState;
 extern bool Mouse_left_click;
-extern void PutTexture(char*, int, int);
+extern void PutTexture(char*, int, int, double);
 extern int Mouse_X, Mouse_Y;
 extern char *ChosenPlatform;
 
 int CursorPos = 1;
-extern bool TriggerBlackToScr;
 
 void PS_DrawButton()
 {
-	if (CursorPos == 1) PutTexture("przycisk", 480, 37);
-	if (CursorPos == 2) PutTexture("przycisk", 480, 87);
-	if (CursorPos == 3) PutTexture("przycisk", 480, 137);
-	if (CursorPos == 4) PutTexture("przycisk", 480, 187);
-	if (CursorPos == 5) PutTexture("przycisk", 480, 237);
-	if (CursorPos == 6) PutTexture("przycisk", 480, 287);
-	if (CursorPos == 7) PutTexture("przycisk", 480, 337);
-	if (CursorPos == 8) PutTexture("przycisk", 480, 387);
-	if (CursorPos == 9) PutTexture("przycisk", 480, 437);
-	if (CursorPos == 10) PutTexture("przycisk", 480, 487);
+	if (CursorPos == 1) PutTexture("przycisk", 480, 37, 1);
+	if (CursorPos == 2) PutTexture("przycisk", 480, 87, 1);
+	if (CursorPos == 3) PutTexture("przycisk", 480, 137, 1);
+	if (CursorPos == 4) PutTexture("przycisk", 480, 187, 1);
+	if (CursorPos == 5) PutTexture("przycisk", 480, 237, 1);
+	if (CursorPos == 6) PutTexture("przycisk", 480, 287, 1);
+	if (CursorPos == 7) PutTexture("przycisk", 480, 337, 1);
+	if (CursorPos == 8) PutTexture("przycisk", 480, 387, 1);
+	if (CursorPos == 9) PutTexture("przycisk", 480, 437, 1);
+	if (CursorPos == 10) PutTexture("przycisk", 480, 487, 1);
 }
 
 void PS_RefreshCursorPos()
@@ -37,8 +36,7 @@ void PS_RefreshCursorPos()
 	if (Mouse_X > 550 && Mouse_Y > 500 && Mouse_X < 670 && Mouse_Y < 520) CursorPos = 10;
 }
 
-extern double BTSTime;
-extern double BTSAlpha;
+void TransitionEffect();
 void PS_IsPressed()
 {
 	if (Mouse_left_click == true)
@@ -81,28 +79,25 @@ void PS_IsPressed()
 		}
 		std::cout << "Wybrano platforme: " << ChosenPlatform << std::endl;
 		GameState = 1;//przejœcie do menu
-		BTSTime = 0;
-		BTSAlpha = 255;
-		TriggerBlackToScr = true;
+		TransitionEffect();
 	}
 }
 
-extern void BlackToScr();
 void PlatformSelect()
 {
-	PutTexture("menu2", 0, 0);
-	PutTexture("podest1", 550, 50);
-	PutTexture("podest2", 550, 100);
-	PutTexture("podest3", 550, 150);
-	PutTexture("podest4", 550, 200);
-	PutTexture("podest5", 550, 250);
-	PutTexture("podest6", 550, 300);
-	PutTexture("podest7", 550, 350);
-	PutTexture("podest8", 550, 400);
-	PutTexture("podest9", 550, 450);
-	PutTexture("podest10", 550, 500);
+	PutTexture("menu2", 0, 0, 1);
+	PutTexture("podest1", 550, 50, 1);
+	PutTexture("podest2", 550, 100, 1);
+	PutTexture("podest3", 550, 150, 1);
+	PutTexture("podest4", 550, 200, 1);
+	PutTexture("podest5", 550, 250, 1);
+	PutTexture("podest6", 550, 300, 1);
+	PutTexture("podest7", 550, 350, 1);
+	PutTexture("podest8", 550, 400, 1);
+	PutTexture("podest9", 550, 450, 1);
+	PutTexture("podest10", 550, 500, 1);
 
-	if (TriggerBlackToScr) BlackToScr();
+
 	PS_RefreshCursorPos();
 	PS_DrawButton();
 	PS_IsPressed();

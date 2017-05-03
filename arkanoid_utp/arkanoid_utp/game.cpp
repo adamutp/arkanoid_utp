@@ -1,57 +1,80 @@
 #include <iostream>
 #include <SDL.h>
 #include <cmath>
+#include "game.h"
 
 using namespace std;
-extern void PutTexture(char*, int, int);
-extern void GameInProgress();
+void PutTexture(char*, int, int, double);
 extern SDL_Window * Main_Window;
-extern SDL_Renderer * Main_Renderer;
+
 int Level = 1; //numer poziomu
-bool LevelIsLoaded = false;
-extern int Mouse_X, Mouse_Y;
-int Platform_X=250, Platform_Y = 550;
-extern char *ChosenPlatform;
+void LoadMap();
+
+extern int Mouse_X, Mouse_Y; //pozycja myszy
+extern char *ChosenPlatform; //kolor wybranej platformy
+
 extern bool Mouse_left_click; //Troche Ÿle dzia³a. Zmienia siê na true wtedy gdy puœcimy. Do menu siê nada, ale nie do gry
 extern double FrameTime; //Wa¿ne! Czas klatki
 
+int Points;
 #define degtorad(angleDegrees) (angleDegrees * M_PI / 180.0)
 
-struct Brick
-{
-	char *type;
-	int points;
-	bool IsDestroyed;
-	bool IsVisible;
-	int hp;
-
-};
+void NewBonus(int, int);
+void ResetSomeStats();
 
 Brick Map[19][19];
+cPlatform Platform;
+cLifeBar LifeBar;
 
+class cBonus;
+/*************************************
+				Pi³ka
+**************************************/
 class Ball
 {
 private:
 	bool landed;
 	double dir_x;
 	double dir_y;
-	double velocity;
 	double posx_2; //pozycja pi³ki wzglêdem platformy
 	bool CanBounceP; //Czy pi³ka mo¿e odbiæ siê od platformy
-	bool CanBounceW; //Czy pi³ka mo¿e odbiæ siê od œciany
-	bool CanBounceB; //Czy pi³ka mo¿e odbiæ siê od klocka
+public:
+	bool CanLand;
+	double velocity;
 	double pointX[8]; //8 punktów zwi¹zanych z kolizj¹
 	double pointY[8]; //8 punktów zwi¹zanych z kolizj¹
-public:
 	double posx, posy;
 	Ball(double pos_x, double pos_y, bool b_landed, double dir_x, double dir_y); 
 	void BallEvents();
+	void Faster();
+	void Slower();
+	void ResetPositon();
 };
 
-void NextLevel()
+void Ball::Faster()
 {
-
+	velocity = velocity + 100;
+	if (velocity > 800)velocity = 800;
 }
+
+void Ball::Slower()
+{
+	velocity = velocity - 100;
+	if (velocity < 400)velocity = 400;
+}
+
+void Ball::ResetPositon()
+{
+	Platform.x = 250;
+	Platform.y = 550;
+	posx = Platform.x + 60;
+	posy = Platform.y - 15;
+	posx_2 = posx - Platform.x;
+	dir_x = cos(M_PI / 4);
+	dir_y = -sin(M_PI / 4);
+	landed = true;
+}
+
 
 //Konstruktor
 Ball::Ball(double pos_x, double pos_y, bool b_landed, double d_dir_x, double d_dir_y)
@@ -62,26 +85,26 @@ Ball::Ball(double pos_x, double pos_y, bool b_landed, double d_dir_x, double d_d
 	posx = pos_x;
 	posy = pos_y;
 	velocity = 500;
-	posx_2 = pos_x-Platform_X;
+	posx_2 = pos_x-Platform.x;
 	CanBounceP = true;
-	CanBounceW = true;
-	CanBounceB = true;
+	CanLand = false;
 }
 //G³ówne akcje zwi¹zane z pi³k¹
 void Ball::BallEvents()
 {
 	if (landed == true) //jeœli wyl¹dowa³a, to pod¹¿aj za platform¹
 	{
-		posx = Platform_X + posx_2;
+		posx = Platform.x + posx_2;
+		posy = Platform.y - 15;
 	}
 	else //wszystkie akcje, gdy pi³ka nie jest na platformie
 	{
-		posx_2 = posx - Platform_X; //wyliczanie pozycji wzglêdem platformy - potrzebne gdy pi³ka wyl¹dowa³a
+		posx_2 = posx - Platform.x; //wyliczanie pozycji wzglêdem platformy - potrzebne gdy pi³ka wyl¹dowa³a
 
 		double oldposx = posx; //jestem geniuszem
 		double oldposy = posy;
 
-		double movespeed = FrameTime*velocity;
+		double movespeed = FrameTime * velocity;
 		posx = posx + dir_x * movespeed; //Ruchy pi³ki w powietrzu
 		posy = posy + dir_y * movespeed;
 
@@ -102,84 +125,103 @@ void Ball::BallEvents()
 		{
 			for (int b = 0; b < 19; b++)
 			{
-				if (!Map[a][b].IsVisible) continue;
+				if (Map[a][b].IsDestroyed) continue;
 				//pozycje lewego gornego rogu klocka:
 				blockX = 20 + a * 40;
 				blockY = 35 + b * 20;
 				for (int c = 0; c < 8; c++) //te 8 punktów hitboxa pi³ki
 				{
-					if (pointX[c] > blockX && pointX[c] < blockX + 40 && pointY[c]> blockY && pointY[c] < blockY + 20)
+					if ((pointX[c] >= blockX) && 
+						(pointX[c] <= blockX + 40) && 
+						(pointY[c] >= blockY) && 
+						(pointY[c] <= blockY + 20))
 					{
-						if (CanBounceB)
-						{
-							CanBounceB = false;
-							Map[a][b].IsVisible = false; //lub hp-1. Do poprawy
+						double centerX = blockX + 20, centerY = blockY + 10; //pozycja œrodka klocka
+						double ballX = oldposx + 7.5, ballY = oldposy + 7.5; //œrodek pi³ki
 
-							//uderzenie z góry albo do³u
-							if (oldposy + 15 < blockY || oldposy > blockY + 20) dir_y *= -1;
-							else dir_x *= -1; //odbicie z lewej lub prawej
+						if ((centerY - ballY > 0) && (abs(ballX - centerX)/2 <= (centerY - ballY))) dir_y *= -1; //uderzenie z góry
+						else if ((centerY - ballY <= 0) && (abs(ballX - centerX)/2 <= (ballY - centerY))) dir_y *= -1; //z do³u
+						else if ((centerX - ballX > 0) && (abs(ballY - centerY) < (centerX - ballX) / 2)) dir_x *= -1; //z lewej
+						else dir_x *= -1; //z prawej
 
-
-						}
-						break; //jak ju¿ pi³ka w coœ uderzy, to ma nie sprawdzaæ reszty punktów hitboxa
+						//Stwórz bonus, gdy uderzy w zniszczalny klocek
+						if(Map[a][b].MustBeDestroyed) NewBonus(blockX, blockY);
+						posx = oldposx;
+						posy = oldposy;
+						Map[a][b].hp--;
+						if (Map[a][b].hp < 1)Map[a][b].IsDestroyed = true;
+						else if (Map[a][b].hp < 2) Map[a][b].IsVisible = true;
+						if (Map[a][b].IsDestroyed)Map[a][b].IsVisible = false;
+						goto wyjscie; //break; //jak ju¿ pi³ka w coœ uderzy, to ma nie sprawdzaæ reszty punktów hitboxa, ani czy uderzy³o w inny klocek
 					}
 				}
 			}
 		}
+		wyjscie: //zapobiega zbijaniu dwóch klocków na raz
 
+		bool EmptyLevel = true;
+		//sprawdzanie czy s¹ klocki na mapie
+		for (int a = 0; a < 19; a++)
+		{
+			for (int b = 0; b < 19; b++)
+			{
+				if (!Map[a][b].IsDestroyed && Map[a][b].MustBeDestroyed) EmptyLevel = false;
+			}
+		}
+		if (EmptyLevel)
+		{
+			TransitionEffect();
+			Level++;
+			LoadMap();
+		}
 		/*
 		
 			W TYM MIEJSCU SPRAWDZIÆ, CZY JEST 0 KLOCKÓW NA MAPIE. JAK TAK TO DAJ EFEKTY PRZEJSCIA + ZA£ADUJ NASTÊPN¥ MAPÊ
 		
 		*/
 
-		if (posx > blockX - 15 && posx < blockX + 40 && posy + 15 > blockY && posy < blockY + 20) //bug
-		{
-		}
-		else CanBounceB = true;
 
 		//odbicia od œcian:
 
 		if (posx < 20 || posx > 765)//odbicie o lewy lub prawy bok
 		{
-			if (CanBounceW)
-			{
-				CanBounceW = false;
-				dir_x *= -1;
-			}
+			dir_x *= -1;
+			posx = oldposx;
+			posy = oldposy;
 		}
-		else if ((posx < 20 || posx > 765) && posy < 0)
+		if (posy < 0)
 		{
-			if (CanBounceW)
-			{
-				CanBounceW = false;
-				dir_y *= -1;
-				dir_x *= -1;
-			}
+			dir_y *= -1;
+
+			posx = oldposx;
+			posy = oldposy;
 		}
-		else if (posy < 0)
+		//spad³a:
+		if (posy > 600)
 		{
-			if (CanBounceW)
-			{
-				CanBounceW = false;
-				dir_y *= -1;
-			}
+			LifeBar.LoseLife(); 
+			Platform.x = 250;
+			Platform.y = 550;
+			posx = Platform.x + 60;
+			posy = Platform.y - 15;
+			posx_2 = posx - Platform.x;
+			dir_x = cos(M_PI / 4);
+			dir_y = -sin(M_PI / 4);
+			landed = true;
+			ResetSomeStats();
 		}
-		else CanBounceW = true;
 
 		//odbicia od platformy:
-													
-		if (posx > Platform_X - 15 && posx < Platform_X + 125 //Je¿eli pi³ka jest w hitboxie platformy
-			&& posy > Platform_Y-15 && posy < Platform_Y)// -15 bo kulka(jej y jest w lewym gornym rogu)
-
+		if (posx > Platform.x - 10 &&
+			posx < Platform.x + Platform.width &&
+			posy > Platform.y - 15 &&
+			posy < Platform.y + Platform.height - 10)
 		{
+			
 			if (CanBounceP) //Chodzi o to, by po dotkniêciu platformy mog³a odbiæ siê tylko raz
 			{
 				CanBounceP = false;
 				
-				/*double posC = (posx_2 - 60)/80;
-				dir_x = posC;
-				dir_y = -cos(posC);*/
 				double posC = 1.260*(120 - posx_2) + 13.95; 
 				if (posx_2 < 1)posC = 165;
 				if (posx_2 > 120)posC = 15;
@@ -188,7 +230,7 @@ void Ball::BallEvents()
 				dir_x = cos(degtorad(posC));
 				dir_y = -sin(degtorad(posC));
 			}
-			//landed = true; //Dobre miejsce, by wstawiæ kod odpowiadaj¹cy za l¹dowanie pi³ki i przetrzymywanie
+			if(CanLand) landed = true; //Dobre miejsce, by wstawiæ kod odpowiadaj¹cy za l¹dowanie pi³ki i przetrzymywanie
 		}
 		else CanBounceP = true; //Jeœli pi³ka wyjdzie z pola platformy
 		oldposx = posx;
@@ -200,106 +242,270 @@ void Ball::BallEvents()
 	}
 }
 
-Ball Main_Ball(Platform_X+60, Platform_Y-15, true, cos(M_PI/4), -sin(M_PI/4)); //Przypominam, ¿e góra ekranu to 0px, a dó³ 800px. Dlatego jest minus.
+
+Ball Main_Ball(Platform.x+60, Platform.y, true, cos(M_PI/4), -sin(M_PI/4)); //Przypominam, ¿e góra ekranu to 0px, a dó³ 800px. Dlatego jest minus.
+
+ /*************************************
+		   Bonusy
+**************************************/
+#include <ctime>
+#include <cstdlib>
+class cBonus
+{
+private:
+	double velocityX, velocityY;
+	double x, y;
+	double time;
+	bool IsVisible;
+	char * type;
+public:
+	void Reset();
+	void GenerateBonus(int px, int py);
+	void Events();
+
+};
+
+
+void cBonus::GenerateBonus(int px, int py)
+{
+	//jeœli nie stworzono nowego bonusa, to stwórz go (z jak¹œ szans¹):
+	if (IsVisible == false)
+	{
+		double RandNumber1 = rand() % 400 - 200; //losowa szybkoœæ X
+		double RandNumber2 = rand() % 300 + 200; //losowa szybkoœæ Y
+		int a = rand() % 10;
+		if (a == 1) //10% szans
+		{
+			int b = rand() % 6;
+			IsVisible = true;
+			if (b == 0)type = "add_points";
+			else if (b == 1)type = "expand";
+			else if (b == 2)type = "glue";
+			else if (b == 3)type = "reduce";
+			else if (b == 4)type = "slow";
+			else type = "speed";
+			x = px;
+			y = py;
+			velocityX = RandNumber1;
+			velocityY = RandNumber2;
+			time = 0;
+		}
+	}
+}
+
+void cBonus::Events()
+{
+	if (IsVisible == true)
+	{
+		PutTexture(type, x, y, 1);
+		double oldX = x, oldY = y;
+		time = time + FrameTime;
+		double velY = -(velocityY - 400 * time);
+
+		x = x + velocityX * FrameTime;
+		y = y + velY * FrameTime;
+
+		if (x < 20 || x > 745) //obicie o lew¹/praw¹ stronê
+		{
+			x = oldX;
+			y = oldY;
+			velocityX *= -1;
+		}
+		if (y < 0) //odbicie o górê
+		{
+			while (y < 0)
+			{
+				time = time + FrameTime;
+				velY = -(velocityY - 400 * time);
+
+				x = x + velocityX * FrameTime;
+				y = y + velY * FrameTime;
+			}
+			x = oldX;
+			y = oldY;
+		}
+
+		//usuniêcie bonusu gdy wypadnie na dó³ ekran
+		if (y > 600)
+		{
+			IsVisible = false;
+		}
+		if ((x + 40 > Platform.x) &&
+			(x< Platform.x + Platform.width) &&
+			(y + 15 > Platform.y) &&
+			(y < Platform.y + Platform.height))
+		{
+			IsVisible = false;
+			//dŸwiêk
+			if (type == "add_points") Points = Points + 500;
+			else if (type == "expand") Platform.Expand();
+			else if (type == "glue") Main_Ball.CanLand = true;
+			else if (type == "reduce") Platform.Reduce();
+			else if (type == "slow") Main_Ball.Slower();
+			else Main_Ball.Faster(); 
+		}
+	}
+}
+
+void cBonus::Reset()
+{
+	IsVisible = false;
+}
+
+cBonus Bonus;
+
+void NewBonus(int x, int y)
+{
+	Bonus.GenerateBonus(x, y);
+}
+
+#include <fstream>
+
+char *BrickList[20] = { "k1", "k2", "k3", "k4", "k5", "k6", "k7", "k8", "k9", "k10", "k11", "k12", "k13", "k14", "k15", "k16", "k17", "k18", "k19", "k20" };
 
 void LoadMap()
 {
-	LevelIsLoaded = true;
-
-	for (int a = 0; a < 19; a++)
+	if (Level == 1)
 	{
-		if (a % 2)
-		{
-			for (int b = 0; b < 19; b += 2)
+		ifstream read;
+		read.open("level1.lvl");
+
+		for(int a=0; a<19; a++)
+			for (int b = 0; b < 19; b++)
 			{
-				Map[a][b] = { "k7",500,false,true,1 };
+				int x;
+				read >> x;
+				Map[a][b].type = BrickList[x];
+				read >> Map[a][b].points;
+				read >> Map[a][b].IsDestroyed;
+				read >> Map[a][b].IsVisible;
+				read >> Map[a][b].MustBeDestroyed;
+				read >> Map[a][b].hp;
 			}
-		}/*
-		else
-		{
-			for (int b = 1; b < 19; b += 2)
-			{
-				Map[a][b] = { "k7", 500, false, true, 1 };
-			}
-		}*/
-		
+		read.close();
+		cout << "Zaladowano mape nr " << Level << endl;
+		ResetSomeStats();
 	}
-	for (int a = 0; a < 19; a++)
+	else if (Level == 2)
 	{
-		if (a % 2)
-		{
-			for (int b = 1; b < 19; b += 2)
+		ifstream read;
+		read.open("level2.lvl");
+
+		for (int a = 0; a<19; a++)
+			for (int b = 0; b < 19; b++)
 			{
-				Map[a][b] = { "k17",500,false,true,1 };
+				int x;
+				read >> x;
+				Map[a][b].type = BrickList[x];
+				read >> Map[a][b].points;
+				read >> Map[a][b].IsDestroyed;
+				read >> Map[a][b].IsVisible;
+				read >> Map[a][b].MustBeDestroyed;
+				read >> Map[a][b].hp;
 			}
-		}/*
-		else
-		{
-			for (int b = 0; b < 19; b += 2)
-			{
-				Map[a][b] = { "k17", 500, false, true, 1 };
-			}
-		}
-		*/
+		read.close();
+		cout << "Zaladowano mape nr " << Level << endl;
+		ResetSomeStats();
 	}
+	else if (Level == 3)
+	{
+		ifstream read;
+		read.open("level3.lvl");
 
+		for (int a = 0; a<19; a++)
+			for (int b = 0; b < 19; b++)
+			{
+				int x;
+				read >> x;
+				Map[a][b].type = BrickList[x];
+				read >> Map[a][b].points;
+				read >> Map[a][b].IsDestroyed;
+				read >> Map[a][b].IsVisible;
+				read >> Map[a][b].MustBeDestroyed;
+				read >> Map[a][b].hp;
+			}
+		read.close();
+		cout << "Zaladowano mape nr " << Level << endl;
+		ResetSomeStats();
+	}
+	else if (Level == 4)
+	{
+		ifstream read;
+		read.open("level4.lvl");
 
-	cout << "Zaladowano mape nr " << Level << endl;
+		for (int a = 0; a<19; a++)
+			for (int b = 0; b < 19; b++)
+			{
+				int x;
+				read >> x;
+				Map[a][b].type = BrickList[x];
+				read >> Map[a][b].points;
+				read >> Map[a][b].IsDestroyed;
+				read >> Map[a][b].IsVisible;
+				read >> Map[a][b].MustBeDestroyed;
+				read >> Map[a][b].hp;
+			}
+		read.close();
+		cout << "Zaladowano mape nr " << Level << endl;
+		ResetSomeStats();
+	}
+	else
+	{
+		TransitionEffect();
+		GameState = 1;
+		SDL_ShowCursor(1); //poka¿ kursor
+	}
 }
 
 void ShowMap()
 {
+	PutTexture("background", 0, 0, 1); //tekstura t³a
+
+	//wyœwietlanie ca³ego Map[][].
 	for (int a = 0; a < 19; a++) //poziomo
 	{
 		for (int b = 0; b < 19; b++) //pionowo
 		{
-			if(Map[a][b].IsVisible) 
-				PutTexture(Map[a][b].type, 20 + a * 40, 35 + b * 20); //wyœwietlanie ca³ego Map[][].
+			if(Map[a][b].IsVisible && Map[a][b].hp>=1) 
+				PutTexture(Map[a][b].type, 20 + a * 40, 35 + b * 20, 1); 
 		}
 	}
-	PutTexture(ChosenPlatform, Platform_X, Platform_Y);
-	PutTexture("pilka1", Main_Ball.posx, Main_Ball.posy);
+
+	PutTexture(ChosenPlatform, Platform.x, Platform.y, 0.50 + (0.25*Platform.length) ); //wyœwietlanie platformy
+	PutTexture("pilka1", Main_Ball.posx, Main_Ball.posy, 1); //wyœwietlanie pi³ki
+	LifeBar.DrawLifeBar();
 }
 
-void PlatformPosition()
+//Ustalanie wartoœci gdy zaczêto now¹ grê
+void ResetStats()
 {
-	int windowX, windowY;
-	SDL_GetWindowPosition(Main_Window, &windowX, &windowY); 
-	Platform_X = Platform_X + (Mouse_X - 400); //poruszanie
-	if (Platform_X < 20)Platform_X = 20; //¿eby nie wysz³o poza ekran
-	else if (Platform_X > 660)Platform_X = 660; //-120, bo taka dlugosc platformy
-	if (SDL_GetWindowFlags(Main_Window) & SDL_WINDOW_INPUT_FOCUS) //jesli nasza gra jest g³ównym oknem
-		SDL_WarpMouseGlobal(windowX + 400, windowY + 300); //kursor wraca na œrodek ekranu gry
+	srand(time(NULL));
+	LifeBar.SetLifes(3);
+	Level = 1;
+	LoadMap();
+	Bonus.Reset();
+	Points = 0;
+	ResetSomeStats();
 }
-/*
-void BallPosition()
+
+void ResetSomeStats()
 {
-	int windowX, windowY;
-	SDL_GetWindowPosition(Main_Window, &windowX, &windowY);
-	Ball_X = Ball_X + (Mouse_X - 400);
-	if (Ball_X < 70)Ball_X = 70;
-	else if (Ball_X > 710)Ball_X = 710; 
-	if (SDL_GetWindowFlags(Main_Window) & SDL_WINDOW_INPUT_FOCUS)
-		SDL_WarpMouseGlobal(windowX + 400, windowY + 300);
-}*/
+	Main_Ball.ResetPositon();
+	Main_Ball.velocity = 500;
+	Platform.Reduce();
+	Platform.Reduce();
+	Platform.Expand(); //to powinno przywróciæ platformê do normalnej d³ugoœci
+	Main_Ball.CanLand = false;
+	SDL_ShowCursor(0); //ukrywanie kursora myszy
+}
 
-extern bool TriggerBlackToScr;
-extern void BlackToScr();
 
+//ta funkcja jest w nieskoñczonej pêtli
 void GameInProgress()
 {
-	if (!LevelIsLoaded)
-	{
-		LoadMap();
-		//Map[5][5] = { "k1", 500, false, true, 1 };
-		LevelIsLoaded = true;
-		SDL_ShowCursor(0);
-	}
-	Main_Ball.BallEvents(); //wszystkie zdarzenia zwi¹zane z pi³k¹
-	PlatformPosition();//aktualizacja pozycji platformy dla ruchów myszy
-	PutTexture("background", 0, 0); //tekstura t³a
 	ShowMap(); //wyœwietlanie wszystkiego na ekranie
-	if (TriggerBlackToScr)BlackToScr();
-	//BallPosition();
-
+	Platform.PlatformPosition();//aktualizacja pozycji platformy dla ruchów myszy
+	Main_Ball.BallEvents(); //wszystkie zdarzenia zwi¹zane z pi³k¹
+	Bonus.Events();
+	LifeBar.IsOver(); //sprawdzanie, czy przegraliœmy
 }
