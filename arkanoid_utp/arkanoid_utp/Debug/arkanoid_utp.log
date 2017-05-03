@@ -1,6 +1,3 @@
-﻿  game.cpp
-g:\projekt_nowy\arkanoid_utp\arkanoid_utp\game.cpp(300): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-g:\projekt_nowy\arkanoid_utp\arkanoid_utp\game.cpp(475): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-g:\projekt_nowy\arkanoid_utp\arkanoid_utp\game.cpp(482): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-  arkanoid_utp.vcxproj -> G:\projekt_nowy\arkanoid_utp\Debug\arkanoid_utp.exe
-  arkanoid_utp.vcxproj -> G:\projekt_nowy\arkanoid_utp\Debug\arkanoid_utp.pdb (Full PDB)
+﻿  platform_select.cpp
+  arkanoid_utp.vcxproj -> C:\arkanoid_utp\arkanoid_utp\Debug\arkanoid_utp.exe
+  arkanoid_utp.vcxproj -> C:\arkanoid_utp\arkanoid_utp\Debug\arkanoid_utp.pdb (Full PDB)

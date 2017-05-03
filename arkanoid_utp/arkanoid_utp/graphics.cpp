@@ -96,6 +96,14 @@ Texture reduce(40, 20);
 Texture slow(40, 20);
 Texture speed(40, 20);
 
+//select platform
+
+Texture select_menu(800, 600);
+Texture select_button_left(40, 40);
+Texture select_button_right(40, 40);
+Texture select_ok(60, 40);
+
+
 void LoadAllTextures()
 {
 	//k1.Surf = IMG_Load(k1_1); //z projektowego pliku
@@ -255,6 +263,20 @@ void LoadAllTextures()
 	glue.Surf = IMG_Load(glue_2);
 	glue.Txt = SDL_CreateTextureFromSurface(Main_Renderer, glue.Surf);
 
+	//select platform
+
+	//============================================================
+	select_menu.Surf = IMG_Load(select_menu_2);
+	select_menu.Txt = SDL_CreateTextureFromSurface(Main_Renderer, select_menu.Surf);
+
+	select_button_left.Surf = IMG_Load(select_button_left_2);
+	select_button_left.Txt = SDL_CreateTextureFromSurface(Main_Renderer, select_button_left.Surf);
+
+	select_button_right.Surf = IMG_Load(select_button_right_2);
+	select_button_right.Txt = SDL_CreateTextureFromSurface(Main_Renderer, select_button_right.Surf);
+
+	select_ok.Surf = IMG_Load(select_ok_2);
+	select_ok.Txt = SDL_CreateTextureFromSurface(Main_Renderer, select_ok.Surf);
 
 }
 
@@ -312,6 +334,13 @@ void PutTexture(char *texture_name, int x, int y, double mod=1)
 	else if (texture_name == "slow") slow.DrawTexture(x, y);
 	else if (texture_name == "speed") speed.DrawTexture(x, y);
 	else if (texture_name == "glue") glue.DrawTexture(x, y);
+
+	//select platform
+
+	else if (texture_name == "select_menu") select_menu.DrawTexture(x, y,mod);
+	else if (texture_name == "select_button_left") select_button_left.DrawTexture(x, y,mod);
+	else if (texture_name == "select_button_right") select_button_right.DrawTexture(x, y,mod);
+	else if (texture_name == "select_ok") select_ok.DrawTexture(x, y,mod);
 
 
 	else

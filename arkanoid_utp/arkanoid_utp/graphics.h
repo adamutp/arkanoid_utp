@@ -145,3 +145,18 @@ const char* speed_2 = "images/bonus/speed.png";
 
 const char* glue_1 = "glue.png";
 const char* glue_2 = "images/bonus/glue.png";
+
+
+// select_platform
+
+const char* select_menu_1 = "select_menu.jpg";
+const char* select_menu_2 = "images/select_platform/select_menu.jpg";
+
+const char* select_button_left_1 = "select_button1.png";
+const char* select_button_left_2 = "images/select_platform/select_button1.png";
+
+const char* select_button_right_1 = "select_button.png";
+const char* select_button_right_2 = "images/select_platform/select_button.png";
+
+const char* select_ok_1 = "select_ok.png";
+const char* select_ok_2 = "images/select_platform/select_ok.png";
