@@ -90,6 +90,7 @@ Ball::Ball(double pos_x, double pos_y, bool b_landed, double d_dir_x, double d_d
 	CanLand = false;
 }
 //G³ówne akcje zwi¹zane z pi³k¹
+extern SDL_Renderer * Main_Renderer;
 void Ball::BallEvents()
 {
 	if (landed == true) //jeœli wyl¹dowa³a, to pod¹¿aj za platform¹
@@ -107,7 +108,6 @@ void Ball::BallEvents()
 		double movespeed = FrameTime * velocity;
 		posx = posx + dir_x * movespeed; //Ruchy pi³ki w powietrzu
 		posy = posy + dir_y * movespeed;
-
 		int blockX, blockY;
 
 		//odbicie od klocków (hitbox pi³ki sklada sie z 8 punktów na okrêgu):
@@ -119,6 +119,7 @@ void Ball::BallEvents()
 			pointX[a] = posx + 7.5 + 7.5*cos(alfa);
 			pointY[a] = posy + 7.5 + 7.5*sin(alfa);
 			alfa = alfa + (2 * M_PI / 8); //hyhy powodzenia w rozkodowaniu tego
+			SDL_RenderDrawPoint(Main_Renderer, pointX[a], pointY[a]);
 		}
 
 		for (int a = 0; a < 19; a++)
@@ -132,9 +133,9 @@ void Ball::BallEvents()
 				for (int c = 0; c < 8; c++) //te 8 punktów hitboxa pi³ki
 				{
 					if ((pointX[c] >= blockX) && 
-						(pointX[c] <= blockX + 40) && 
+						(pointX[c] < blockX + 40) && 
 						(pointY[c] >= blockY) && 
-						(pointY[c] <= blockY + 20))
+						(pointY[c] < blockY + 20))
 					{
 						double centerX = blockX + 20, centerY = blockY + 10; //pozycja œrodka klocka
 						double ballX = oldposx + 7.5, ballY = oldposy + 7.5; //œrodek pi³ki
@@ -148,6 +149,9 @@ void Ball::BallEvents()
 						if(Map[a][b].MustBeDestroyed) NewBonus(blockX, blockY);
 						posx = oldposx;
 						posy = oldposy;
+						posx = posx + dir_x * movespeed;
+						posy = posy + dir_y * movespeed;
+
 						Map[a][b].hp--;
 						if (Map[a][b].hp < 1)Map[a][b].IsDestroyed = true;
 						else if (Map[a][b].hp < 2) Map[a][b].IsVisible = true;

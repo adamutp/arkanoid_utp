@@ -92,7 +92,7 @@ void BlackToScr();
 //Przeniesienie wszystkich tekstur na ekran u¿ytkownika
 void Rendering()
 {
-	//ShowFPS();
+	ShowFPS();
 	if (TransitionEffectOn)BlackToScr();
 	SDL_RenderPresent(Main_Renderer);
 }
