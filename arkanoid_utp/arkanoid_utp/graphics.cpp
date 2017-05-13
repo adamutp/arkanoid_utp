@@ -1,4 +1,6 @@
+#include <iostream>
 #include "graphics.h"
+
 
 class Texture
 {
@@ -8,6 +10,8 @@ public:
 	SDL_Surface * Surf;
 	Texture(int x, int y);
 	void DrawTexture(int x, int y);
+	void DrawTexture(int x, int y, double mod);
+	void DrawTexture(int x, int y, double modX, double modY);
 };
 
 Texture::Texture(int x, int y)
@@ -19,6 +23,19 @@ Texture::Texture(int x, int y)
 void Texture::DrawTexture(int x, int y)
 {
 	SDL_Rect dest = { x, y, size.w, size.h };
+	SDL_RenderCopy(Main_Renderer, Txt, &size, &dest);
+}
+
+//Postawia teksturê ze zmodyfikowan¹ szerokoœci¹ (do zmiany d³ugoœci platformy)
+void Texture::DrawTexture(int x, int y, double mod)
+{
+	SDL_Rect dest = { x, y, size.w*mod, size.h };
+	SDL_RenderCopy(Main_Renderer, Txt, &size, &dest);
+}
+
+void Texture::DrawTexture(int x, int y, double modX, double modY)
+{
+	SDL_Rect dest = { x, y, size.w*modX, size.h*modY };
 	SDL_RenderCopy(Main_Renderer, Txt, &size, &dest);
 }
 //klocki:
@@ -57,6 +74,8 @@ Texture podest10(120, 20);
 
 //tlo w grze:
 Texture background(800, 600);
+SDL_Surface * Black;
+SDL_Texture * Black_T;
 
 //pi³ka:
 Texture pilka(15, 15);
@@ -67,6 +86,23 @@ Texture pilka2(15, 15);
 Texture menu(800, 600);
 Texture przycisk(40, 40);
 Texture menu2(800, 600);
+
+//bonusy:
+
+Texture add_points(40, 20);
+Texture expand(40, 20);
+Texture glue(40, 20);
+Texture reduce(40, 20);
+Texture slow(40, 20);
+Texture speed(40, 20);
+
+//select platform
+
+Texture select_menu(800, 600);
+Texture select_button_left(40, 40);
+Texture select_button_right(40, 40);
+Texture select_ok(60, 40);
+
 
 void LoadAllTextures()
 {
@@ -189,6 +225,12 @@ void LoadAllTextures()
 	//============================================================
 	background.Surf = IMG_Load(background_2);
 	background.Txt = SDL_CreateTextureFromSurface(Main_Renderer, background.Surf);
+	
+	//============================================================
+	Black = SDL_LoadBMP("images/ingame/black.bmp");
+	Black_T = SDL_CreateTextureFromSurface(Main_Renderer, Black);
+	SDL_BlendMode blending = SDL_BLENDMODE_BLEND;
+	SDL_SetTextureBlendMode(Black_T, blending);
 
 	//============================================================
 	menu.Surf = IMG_Load(menu2_2);
@@ -199,9 +241,46 @@ void LoadAllTextures()
 	//============================================================
 	przycisk.Surf = IMG_Load(button_2);
 	przycisk.Txt = SDL_CreateTextureFromSurface(Main_Renderer, przycisk.Surf);
+
+	// BONUSY
+
+	//============================================================
+	add_points.Surf = IMG_Load(add_points_2);
+	add_points.Txt = SDL_CreateTextureFromSurface(Main_Renderer, add_points.Surf);
+	//============================================================
+	expand.Surf = IMG_Load(expand_2);
+	expand.Txt = SDL_CreateTextureFromSurface(Main_Renderer, expand.Surf);
+	//============================================================
+	reduce.Surf = IMG_Load(reduce_2);
+	reduce.Txt = SDL_CreateTextureFromSurface(Main_Renderer, reduce.Surf);
+	//============================================================
+	slow.Surf = IMG_Load(slow_2);
+	slow.Txt = SDL_CreateTextureFromSurface(Main_Renderer, slow.Surf);
+	//============================================================
+	speed.Surf = IMG_Load(speed_2);
+	speed.Txt = SDL_CreateTextureFromSurface(Main_Renderer, speed.Surf);
+	//============================================================
+	glue.Surf = IMG_Load(glue_2);
+	glue.Txt = SDL_CreateTextureFromSurface(Main_Renderer, glue.Surf);
+
+	//select platform
+
+	//============================================================
+	select_menu.Surf = IMG_Load(select_menu_2);
+	select_menu.Txt = SDL_CreateTextureFromSurface(Main_Renderer, select_menu.Surf);
+
+	select_button_left.Surf = IMG_Load(select_button_left_2);
+	select_button_left.Txt = SDL_CreateTextureFromSurface(Main_Renderer, select_button_left.Surf);
+
+	select_button_right.Surf = IMG_Load(select_button_right_2);
+	select_button_right.Txt = SDL_CreateTextureFromSurface(Main_Renderer, select_button_right.Surf);
+
+	select_ok.Surf = IMG_Load(select_ok_2);
+	select_ok.Txt = SDL_CreateTextureFromSurface(Main_Renderer, select_ok.Surf);
+
 }
 
-void PutTexture(char *texture_name, int x, int y)
+void PutTexture(char *texture_name, int x, int y, double mod=1)
 {
 	if (texture_name == "k1")
 	{
@@ -228,16 +307,16 @@ void PutTexture(char *texture_name, int x, int y)
 	else if (texture_name == "k20") k20.DrawTexture(x, y);
 
 
-	else if (texture_name == "podest1") podest1.DrawTexture(x, y);
-	else if (texture_name == "podest2") podest2.DrawTexture(x, y);
-	else if (texture_name == "podest3") podest3.DrawTexture(x, y);
-	else if (texture_name == "podest4") podest4.DrawTexture(x, y);
-	else if (texture_name == "podest5") podest5.DrawTexture(x, y);
-	else if (texture_name == "podest6") podest6.DrawTexture(x, y);
-	else if (texture_name == "podest7") podest7.DrawTexture(x, y);
-	else if (texture_name == "podest8") podest8.DrawTexture(x, y);
-	else if (texture_name == "podest9") podest9.DrawTexture(x, y);
-	else if (texture_name == "podest10") podest10.DrawTexture(x, y);
+	else if (texture_name == "podest1") podest1.DrawTexture(x, y, mod);
+	else if (texture_name == "podest2") podest2.DrawTexture(x, y, mod);
+	else if (texture_name == "podest3") podest3.DrawTexture(x, y, mod);
+	else if (texture_name == "podest4") podest4.DrawTexture(x, y, mod);
+	else if (texture_name == "podest5") podest5.DrawTexture(x, y, mod);
+	else if (texture_name == "podest6") podest6.DrawTexture(x, y, mod);
+	else if (texture_name == "podest7") podest7.DrawTexture(x, y, mod);
+	else if (texture_name == "podest8") podest8.DrawTexture(x, y, mod);
+	else if (texture_name == "podest9") podest9.DrawTexture(x, y, mod);
+	else if (texture_name == "podest10") podest10.DrawTexture(x, y, mod);
 
 	else if (texture_name == "background") background.DrawTexture(x, y);
 	else if (texture_name == "menu") menu.DrawTexture(x, y);
@@ -246,9 +325,93 @@ void PutTexture(char *texture_name, int x, int y)
 	else if (texture_name == "pilka1") pilka1.DrawTexture(x, y);
 	else if (texture_name == "pilka2") pilka2.DrawTexture(x, y);
 	else if (texture_name == "przycisk") przycisk.DrawTexture(x, y);
+
+
+	//bonusy
+	else if (texture_name == "add_points") add_points.DrawTexture(x, y);
+	else if (texture_name == "reduce") reduce.DrawTexture(x, y);
+	else if (texture_name == "expand") expand.DrawTexture(x, y);
+	else if (texture_name == "slow") slow.DrawTexture(x, y);
+	else if (texture_name == "speed") speed.DrawTexture(x, y);
+	else if (texture_name == "glue") glue.DrawTexture(x, y);
+
+	//select platform
+
+	else if (texture_name == "select_menu") select_menu.DrawTexture(x, y,mod);
+	else if (texture_name == "select_button_left") select_button_left.DrawTexture(x, y,mod);
+	else if (texture_name == "select_button_right") select_button_right.DrawTexture(x, y,mod);
+	else if (texture_name == "select_ok") select_ok.DrawTexture(x, y,mod);
+
+
 	else
 	{
-		std::cout << "Podales zla nazwe tekstury" << std::endl;
+		//Ups
 	}
 }
 
+void PutResizedTexture(char *texture_name, int x, int y, double modX = 1, double modY = 1)
+{
+	if (texture_name == "podest3") podest3.DrawTexture(x, y, modX, modY);
+	else std::cout << "Zla nazwa tekstury";
+}
+
+extern double FrameTime;
+extern int TimeNow, TimeOld;
+extern double FPS;
+
+
+double BTSTime = 0;
+double BTSAlpha = 255;
+bool TransitionEffectOn = true;
+
+void ScrToBlack() //0.5s przejœcia
+{ 
+	Black = SDL_LoadBMP("images/ingame/black.bmp");
+	Black_T = SDL_CreateTextureFromSurface(Main_Renderer, Black);
+	SDL_BlendMode blending = SDL_BLENDMODE_BLEND;
+	SDL_SetTextureBlendMode(Black_T, blending);
+	double alpha = 0;
+	SDL_SetTextureAlphaMod(Black_T, alpha);
+	SDL_Rect src = { 0, 0, 800, 600 };
+	bool end = false;
+	double time=0;
+	while (!end)
+	{
+		TimeNow = SDL_GetTicks();
+		FrameTime = (TimeNow - TimeOld) / 1000.0;
+		time = time + FrameTime;
+		if (time > 0.5) 
+			end = true;
+		alpha = alpha + FrameTime * 20;
+		SDL_SetTextureAlphaMod(Black_T, alpha);
+		SDL_RenderCopy(Main_Renderer, Black_T, &src, &src);
+		SDL_RenderPresent(Main_Renderer);
+		TimeOld = TimeNow;
+		SDL_Delay(1 / FPS);
+	}
+}
+
+void BlackToScr() //0.5s przejœcia
+{
+	SDL_SetTextureAlphaMod(Black_T, BTSAlpha);
+	SDL_Rect src = { 0, 0, 800, 600 };
+	BTSTime = BTSTime + FrameTime;
+	BTSAlpha = BTSAlpha - FrameTime * 255;
+	if (BTSAlpha < 0)BTSAlpha = 0;
+	SDL_SetTextureAlphaMod(Black_T, BTSAlpha);
+	SDL_RenderCopy(Main_Renderer, Black_T, &src, &src);
+	if (BTSTime > 1)
+	{
+		TransitionEffectOn = false;
+		BTSAlpha = 255;
+		BTSTime = 0;
+	}
+}
+
+void TransitionEffect()
+{
+	BTSTime = 0;
+	BTSAlpha = 255;
+	ScrToBlack();
+	TransitionEffectOn = true;
+}

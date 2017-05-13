@@ -1,7 +1,7 @@
 #pragma once
 
-#define FPS 60.0
-using namespace std;
+//Klatki na sekundê. Mo¿na zmieniaæ
+double FPS = 300.0;
 
 SDL_Window * Main_Window;
 SDL_Renderer * Main_Renderer;
@@ -11,6 +11,7 @@ bool ProgramIsOn = true;
 int TimeNow, TimeOld = 1; //In miliseconds
 double FrameTime;
 
+//Sta³a rozdzielczoœæ
 int Resolution_X = 800;
 int Resolution_Y = 600;
 
@@ -20,24 +21,20 @@ bool Mouse_left_click = false;
 bool Mouse_right_click = false;
 bool previousState = false;//do myszy
 
-//Tekstury
-
-SDL_Surface * example_surface;
-SDL_Texture * example_texture1;
-SDL_Rect text1_size;
-SDL_Texture * example_texture2;
+bool PressedF10 = false;
+bool PressedLeft = false;
+bool PressedRight = false;
 
 //Prototypy
-
 void LoadAllTextures();
 void Menu();
 void PlatformSelect();
+void GameInProgress();
+void Editor();
 
-//Z pliku graphics.cpp
-extern void PutTexture(char *, int, int);
 
 //Zmienna okreœlaj¹ca gdzie aktualnie jesteœmy:
 //1-Menu  2-Gra 3-Wybór platformy ... mozna dodawac kolejne np. tablica highscore
 
 int GameState = 1;
-int ChosenPlatform = 1; //1-10 kolor platformy
+char *ChosenPlatform = "podest1"; //podest1-10 kolor platformy

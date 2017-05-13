@@ -1,15 +1,12 @@
 #pragma once
 #include <SDL.h>
-#include <string>
 #include <SDL_image.h>
 #include <iostream>
-
 extern void LoadAllTextures();
 extern SDL_Renderer * Main_Renderer;
-void PutTexture(char *texture_name, int x, int y);
-//sciezki do grafik
 
 
+//sciezki do grafik:
 
 //klocki
 const char* k1_1 = "k1.bmp";
@@ -129,3 +126,37 @@ const char* button_2 = "images/menu/button.png";
 
 const char* menu1_1 = "Images/menu/menu2.jpg";
 
+//bonusy
+
+const char* add_points_1 = "add_points.png";
+const char* add_points_2 =  "images/bonus/add_points.png";
+
+const char* expand_1 = "expand.png";
+const char* expand_2 = "images/bonus/expand.png";
+
+const char* reduce_1 = "reduce.png";
+const char* reduce_2 = "images/bonus/reduce.png";
+
+const char* slow_1 = "slow.png";
+const char* slow_2 = "images/bonus/slow.png";
+
+const char* speed_1 = "speed.png";
+const char* speed_2 = "images/bonus/speed.png";
+
+const char* glue_1 = "glue.png";
+const char* glue_2 = "images/bonus/glue.png";
+
+
+// select_platform
+
+const char* select_menu_1 = "select_menu.jpg";
+const char* select_menu_2 = "images/select_platform/select_menu.jpg";
+
+const char* select_button_left_1 = "select_button1.png";
+const char* select_button_left_2 = "images/select_platform/select_button1.png";
+
+const char* select_button_right_1 = "select_button.png";
+const char* select_button_right_2 = "images/select_platform/select_button.png";
+
+const char* select_ok_1 = "select_ok.png";
+const char* select_ok_2 = "images/select_platform/select_ok.png";
