@@ -1,4 +1,24 @@
 ﻿  platform_select.cpp
+  menu.cpp
+  main.cpp
+g:\backup\projekt\arkanoid_utp\arkanoid_utp\main.cpp(149): warning C4244: 'argument': conversion from 'double' to 'Uint32', possible loss of data
+  graphics.cpp
+g:\backup\projekt\arkanoid_utp\arkanoid_utp\graphics.cpp(32): warning C4838: conversion from 'double' to 'int' requires a narrowing conversion
+g:\backup\projekt\arkanoid_utp\arkanoid_utp\graphics.cpp(32): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+g:\backup\projekt\arkanoid_utp\arkanoid_utp\graphics.cpp(38): warning C4838: conversion from 'double' to 'int' requires a narrowing conversion
+g:\backup\projekt\arkanoid_utp\arkanoid_utp\graphics.cpp(38): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+g:\backup\projekt\arkanoid_utp\arkanoid_utp\graphics.cpp(374): warning C4244: 'argument': conversion from 'double' to 'Uint8', possible loss of data
+g:\backup\projekt\arkanoid_utp\arkanoid_utp\graphics.cpp(386): warning C4244: 'argument': conversion from 'double' to 'Uint8', possible loss of data
+g:\backup\projekt\arkanoid_utp\arkanoid_utp\graphics.cpp(390): warning C4244: 'argument': conversion from 'double' to 'Uint32', possible loss of data
+g:\backup\projekt\arkanoid_utp\arkanoid_utp\graphics.cpp(396): warning C4244: 'argument': conversion from 'double' to 'Uint8', possible loss of data
+g:\backup\projekt\arkanoid_utp\arkanoid_utp\graphics.cpp(401): warning C4244: 'argument': conversion from 'double' to 'Uint8', possible loss of data
+  game.cpp
+g:\backup\projekt\arkanoid_utp\arkanoid_utp\game.cpp(122): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+g:\backup\projekt\arkanoid_utp\arkanoid_utp\game.cpp(304): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+g:\backup\projekt\arkanoid_utp\arkanoid_utp\game.cpp(479): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+g:\backup\projekt\arkanoid_utp\arkanoid_utp\game.cpp(486): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  Editor.cpp
+  Generating Code...
   LINK : G:\backup\projekt\arkanoid_utp\Debug\arkanoid_utp.exe not found or not built by the last incremental link; performing full link
   arkanoid_utp.vcxproj -> G:\backup\projekt\arkanoid_utp\Debug\arkanoid_utp.exe
   arkanoid_utp.vcxproj -> G:\backup\projekt\arkanoid_utp\Debug\arkanoid_utp.pdb (Full PDB)
